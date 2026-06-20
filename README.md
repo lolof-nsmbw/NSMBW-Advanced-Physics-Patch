@@ -57,3 +57,14 @@ The source code provided in this repository is currently intended as a **logic r
 * **Custom Kamek Syntax:** Certain files were compiled using a customized fork of the Kamek compiler, meaning out-of-the-box compilation with the vanilla Kamek toolchain may result in syntax errors or linker failures.
 
 **If you want to use this code in your own project:** You are highly encouraged to read the core logic (momentum inheritance, Yoshi collision, etc.) and adapt/port the hooks to your own project's symbol maps.
+
+---
+
+## 🏆 Credits & Acknowledgements
+
+* **Nintendo:** For creating *New Super Mario Bros. Wii*.
+* **Newer Team:** For the *NewerSMBW* engine and foundational modding tools.
+* **Luke, RedStoneMatt & zement:** For the original upward-throwing shell logic and publishing the foundational NewerGEM codebase.
+* **RoadrunnerWMC, RootCubed & CHN Symbol Map Contributors:** For the invaluable symbol map resources, which greatly aided in cross-region memory offset tracking and reverse engineering[cite: 1].
+* **lele:** My friend and veteran Kaizo player, for providing deep insights into advanced gameplay mechanics and inspiring the new movement features.
+* **2Maliao:** For code collaboration, sharing modding assets, and continuous technical discussion.
