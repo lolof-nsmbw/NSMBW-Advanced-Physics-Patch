@@ -46,10 +46,10 @@ The `Release` tab contains ready-to-use XML patches.
 This patch can be mixed with many other XML mods, but **WILL CONFLICT** under the following conditions:
 1. **Hook Conflicts:** If another mod intercepts the vanilla damage calculation function using the same address (e.g., `mkwcat`'s dynamic `.rel` injection for death/damage messages), features in this patch will fail or cause the game to crash. You will need to manually recompile conflicting code to make them compatible.
 2. **Memory Overlap (Code Cave):** This patch heavily utilizes the free memory area from `0x80001800` to `0x80003800`. If another mod (such as *Super Luigi Land Wii*) uses this same memory space for custom code blocks or `loader.bin`, **the game will crash immediately**. 
-   > **How to fix:** You can resolve this by: 
-   > 1. Relocating the conflicting mod's payload to a different free memory region.
-   > 2. Recompiling our patch with a new base address.
-   > 3. Merging our source code directly into your project and compiling everything together into a single `loader.bin` .
+   > **How to fix:** You can resolve this using **ONE** of the following methods:
+   > * Relocating the conflicting mod's payload to a different free memory region.
+   > * Recompiling our patch with a new base address.
+   > * Merging our source code directly into your project and compiling everything together into a single `loader.bin`.
 
 ---
 
