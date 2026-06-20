@@ -1,0 +1,8 @@
+# 忽略编译中间件和输出文件
+*.o
+*.d
+*.bin
+*.xml
+*.map
+build/
+Kamek/
