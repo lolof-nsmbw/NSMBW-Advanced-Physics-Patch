@@ -17,7 +17,7 @@ This patch can be used seamlessly with vanilla NSMBW, *NewerSMBW*, or other cust
 * **Terrain Immunity:** Yoshi is no longer afraid of spiked floors or Munchers (black piranha plants).
 
 ### 3. Dynamic Climbing Jumps
-* Optimized the jump height when detaching from **climbable terrain** (such as climbable ceilings and walls). Instead of the vanilla fixed 2-block height, it now features a **dynamic 2-4 block height** controlled entirely by the player's button input.
+* Optimized the jump height when detaching from **climbable terrain**. Instead of the vanilla fixed 2-block height, it now features a **dynamic 2-4 block height** controlled entirely by the player's button input.
 
 ### 4. Up-Throw & Instant Drop Mechanics
 * **Item Up-Throw:** Players can now throw items directly upwards! Supported items include: Shells, Bombs, Glow Blocks, Propeller Blocks, POW Blocks, and Springs.
