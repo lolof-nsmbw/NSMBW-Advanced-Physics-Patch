@@ -39,8 +39,8 @@ Due to the technical complexities of the NSMBW engine, the following issues curr
 ## ⚙️ Compatibility & Usage Notes (For Releases)
 
 The `Release` tab contains ready-to-use XML patches. 
-* **Supported Regions:** `NTSC-U v1.00` (USA version 1) and `PAL v2.00` (Europe version 2).
-* **Riivolution Ready:** Simply place the XML in your Riivolution folder.
+* **Supported Versions:** NTSC Rev 1 (`SMNE01`) and PAL Rev 2 (`SMNP01`).
+* **Riivolution Ready:** Simply drop the `.xml` file into your SD card's `riivolution` folder, and place the `.bin` patch files in the designated directory.
 
 **⚠️ Important Compatibility Warnings:**
 This patch can be mixed with many other XML mods, but **WILL CONFLICT** under the following conditions:
