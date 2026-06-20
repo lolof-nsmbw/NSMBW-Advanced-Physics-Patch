@@ -28,12 +28,11 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 
 ## 🐛 Known Issues & Limitations
 Due to the technical complexities of the NSMBW engine, the following issues currently exist (fixes may come in the future, but are limited by engine constraints):
-1. Up-thrown bombs do not trigger block interactions.
-2. Up-thrown bombs and springs cannot hit or interact with blocks. Up-thrown POWs and springs do not interact with the player mid-air.
-3. Up-thrown shells sometimes clip through blocks or fail to trigger block interactions correctly.
-4. Spin-jump bouncing may fail to trigger on certain enemies if the player is currently in damage I-frames (invincibility frames).
-5. Certain custom enemies in the *NewerSMBW* engine may still damage the player during a spin jump.
-6. **[Help Wanted!]** Up-throwing an item still uses the vanilla forward-throw player animation. *(I am not an animator, so if anyone can make a custom upward-throwing animation, contributions are welcome!)*
+1. Up-thrown bombs and springs cannot hit or interact with blocks. Up-thrown POWs and springs do not interact with the player mid-air.
+2. Up-thrown shells sometimes clip through blocks or fail to trigger block interactions correctly.
+3. Spin-jump bouncing may fail to trigger on certain enemies if the player is currently in damage I-frames (invincibility frames).
+4. Certain custom enemies in the *NewerSMBW* engine may still damage the player during a spin jump.
+5. Up-throwing an item still uses the vanilla forward-throw player animation. *(I am not an animator, so if anyone can make a custom upward-throwing animation, contributions are welcome!)*
 
 ---
 
