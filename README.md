@@ -7,9 +7,10 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 ## ✨ Features
 
 ### 1. SMW-Style Spin Jump
+* **Spike Immunity:** You can now safely spin-bounce on Thwomps, Spikeballs, and other spiky enemies without taking damage!
 * **Variable Height Control:** Spin jump height is now dynamic based on how long you hold the jump button.
 * **Delayed Descent:** Holding the jump button during a spin jump reduces fall speed (hovering effect, just like in *Super Mario World*). Releasing the button immediately cancels the delay, returning you to normal fall speed.
-* **Spike Immunity:** You can now safely spin-bounce on Thwomps, Spikeballs, and other spiky enemies without taking damage!
+
 
 ### 2. Yoshi Enhanced
 * **Spiked Enemy Bouncing:** Just like in SMW, Yoshi can now safely bounce on spiky enemies instead of taking damage.
@@ -22,17 +23,7 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 ### 4. Up-Throw & Instant Drop Mechanics
 * **Item Up-Throw:** Players can now throw items directly upwards! Supported items include: Shells, Bombs, Glow Blocks, Propeller Blocks, POW Blocks, and Springs.
 * **Instant Drop:** Pressing down allows players to instantly drop Shells and Bombs at their feet.
-* **Momentum Inheritance:** Up-thrown and dropped items fully inherit the player's X-axis velocity for realistic physics trajectories.
-
----
-
-## 🐛 Known Issues & Limitations
-Due to the technical complexities of the NSMBW engine, the following issues currently exist (fixes may come in the future, but are limited by engine constraints):
-1. Up-thrown bombs and springs cannot hit or interact with blocks. Up-thrown POWs and springs do not interact with the player mid-air.
-2. Up-thrown shells sometimes clip through blocks or fail to trigger block interactions correctly.
-3. Spin-jump bouncing may fail to trigger on certain enemies if the player is currently in damage I-frames (invincibility frames).
-4. Certain custom enemies in the *NewerSMBW* engine may still damage the player during a spin jump.
-5. Up-throwing an item still uses the vanilla forward-throw player animation. *(I am not an animator, so if anyone can make a custom upward-throwing animation, contributions are welcome!)*
+* **Momentum Inheritance:** Up-thrown and dropped items inherit the player's X-axis velocity in a certain proportion for realistic physics trajectories.
 
 ---
 
@@ -50,6 +41,16 @@ This patch can be mixed with many other XML mods, but **WILL CONFLICT** under th
    > * Relocating the conflicting mod's payload to a different free memory region.
    > * Recompiling our patch with a new base address.
    > * Merging our source code directly into your project and compiling everything together into a single `loader.bin`.
+
+---
+
+## 🐛 Known Issues & Limitations
+Due to the technical complexities of the NSMBW engine, the following issues currently exist (fixes may come in the future, but are limited by engine constraints):
+1. Up-thrown bombs and springs cannot hit or interact with blocks. Up-thrown POWs and springs do not interact with the player mid-air.
+2. Up-thrown shells sometimes clip through blocks or fail to trigger block interactions correctly.
+3. Spin-jump bouncing may fail to trigger on certain enemies if the player is currently in damage I-frames (invincibility frames).
+4. Certain custom enemies in the *NewerSMBW* engine may still damage the player during a spin jump.
+5. Up-throwing an item still uses the vanilla forward-throw player animation. *(I am not an animator, so if anyone can make a custom upward-throwing animation, contributions are welcome!)*
 
 ---
 
