@@ -2,7 +2,6 @@
 
 ![Game](https://img.shields.io/badge/Game-NSMBW-red)
 ![Versions](https://img.shields.io/badge/Versions-NTSC--U%20Rev1%20%7C%20PAL%20Rev2-ff69b4)
-![Platform](https://img.shields.io/badge/Platform-Wii%20%7C%20Dolphin-blue)
 ![Compiler](https://img.shields.io/badge/Compiler-CodeWarrior-yellow)
 ![Toolchain](https://img.shields.io/badge/Toolchain-Kamek-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-green)
