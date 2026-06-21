@@ -59,15 +59,25 @@ The source code provided in this repository is currently intended as a **logic r
 * **Mixed Region Hardcoding:** Some `.cpp` and `.S` files contain hardcoded absolute addresses for the PAL version, while others are for the NTSC version. 
 * **Custom Kamek Syntax:** Certain files were compiled using a customized fork of the Kamek compiler, meaning out-of-the-box compilation with the vanilla Kamek toolchain may result in syntax errors or linker failures.
 
-**If you want to use this code in your own project:** You are highly encouraged to read the core logic (momentum inheritance, Yoshi collision, etc.) and adapt/port the hooks to your own project's symbol maps.
+**If you want to use this code in your own project:** You are highly encouraged to read the core logic and adapt/port the hooks to your own project's symbol maps.
+
+---
+
+## 🚀 Future Plans
+I will gradually look into the "Known Issues" listed above. However, due to engine complexities and my limited time, I will prioritize the "low-hanging fruit". Moreover, I plan to explore a few more movement mechanics in the future:
+
+* **Enhanced Sliding Mechanics:** Modifying the slide so it can kill most spiky enemies, bringing it closer to the logic found in *Super Mario Maker* (SMM) and *Super Mario World* (SMW).
+* **Wall-Jump Spin:** Enabling Mario to perform a spin jump directly off walls, adapting the fluid movement style from *New Super Mario Bros. U* (NSMBU).
+
+Please note: my free time is fairly limited. Therefore, progress on these new features and fixes will be very slow. I appreciate your patience and understanding!
 
 ---
 
 ## 🏆 Credits & Acknowledgements
-
 * **Nintendo:** For creating *New Super Mario Bros. Wii*.
 * **Newer Team:** For the *NewerSMBW* engine and foundational modding tools.
 * **Luke, RedStoneMatt & zement:** For the original upward-throwing shell logic and publishing the foundational NewerGEM codebase.
-* **RoadrunnerWMC, RootCubed & CHN Symbol Map Contributors:** For the invaluable symbol map resources, which greatly aided in cross-region memory offset tracking and reverse engineering[cite: 1].
-* **Lele:** My friend and veteran SMM Kaizo player, for providing deep insights into advanced gameplay mechanics and inspiring the new movement features.
+* **RoadrunnerWMC, RootCubed & CHN Symbol Map Contributors:** For the invaluable symbol map resources, which greatly aided in cross-region memory offset tracking and reverse engineering.
+* **lele:** My friend and veteran SMM Kaizo player, for providing deep insights into advanced gameplay mechanics and inspiring the new movement features.
 * **2Maliao:** For code collaboration, sharing modding assets, and continuous technical discussion.
+
