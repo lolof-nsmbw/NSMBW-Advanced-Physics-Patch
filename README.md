@@ -84,7 +84,7 @@ I will gradually look into the "Known Issues" listed above. However, due to engi
 
 ---
 
-## Credits & Acknowledgements
+## Credits
 * **Nintendo:** For creating *New Super Mario Bros. Wii*.
 * **Newer Team:** For the *NewerSMBW* engine and foundational modding tools.
 * **Luke, RedStoneMatt & zement:** For the original upward-throwing shell logic and publishing the foundational NewerGEM codebase.
