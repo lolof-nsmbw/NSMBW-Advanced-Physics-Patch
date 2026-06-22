@@ -4,7 +4,7 @@
 ![Versions](https://img.shields.io/badge/Versions-NTSC--U%20Rev1%20%7C%20PAL%20Rev2-ff69b4)
 ![Compiler](https://img.shields.io/badge/Compiler-CodeWarrior-yellow)
 ![Toolchain](https://img.shields.io/badge/Toolchain-Kamek-lightgrey)
-![License](https://img.shields.io/badge/License-MIT-green)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 An advanced physics and movement patch for *New Super Mario Bros. Wii* (NSMBW). This project was created to enrich the vanilla physics engine with new mechanics, expanding creative possibilities for level designers (especially for **Kaizo hacks**) and enhancing overall gameplay. 
 
