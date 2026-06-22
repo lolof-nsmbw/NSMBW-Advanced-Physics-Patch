@@ -146,7 +146,7 @@ For detailed information on how to adapt, port, or recompile this codebase for y
 
 **Special Thanks:**
 * **Nintendo:** For creating *New Super Mario Bros. Wii*.
-* **Newer Team:** For the *NewerSMBW* engine and foundational modding tools.
+* **Newer Team:** For the *NewerSMBW* and foundational modding tools.
 * **Luke, RedStoneMatt & zement:** For the original upward-throwing shell logic and publishing the foundational NewerGEM codebase.
 * **RoadrunnerWMC, RootCubed & CHN Symbol Map Contributors:** For the invaluable symbol map resources.
 * **Lele:** My friend and veteran SMM Kaizo player, for providing deep insights into advanced mechanics.
