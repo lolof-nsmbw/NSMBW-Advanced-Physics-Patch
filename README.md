@@ -107,7 +107,7 @@ Due to the technical complexities of the NSMBW engine, the following issues curr
 3. Up-thrown shells sometimes clip through blocks or fail to trigger block interactions correctly.
 4. Spin-jump bouncing may fail to trigger on certain enemies if the player is currently in damage I-frames (invincibility frames).
 5. Certain custom enemies in the *NewerSMBW* engine may still damage the player during a spin jump.
-6. **[NEW] Yoshi Spike Ball Bug:** Yoshi attempting to bounce on the Spike Balls (Iron Balls) thrown by Spikes ("加邦") fails to trigger the bounce mechanic for unknown reasons.
+6. Yoshi attempting to bounce on the Spike/Stone thrown by Spikes fails to trigger the bounce mechanic for unknown reasons.
 7. Up-throwing an item still uses the vanilla forward-throw player animation. *(I am not an animator, so if anyone can make a custom upward-throwing animation, contributions are welcome!)*
 
 ---
