@@ -138,6 +138,7 @@ For detailed information on how to adapt, port, or recompile this codebase for y
 
 ---
 
+**Lead Developer:** Arisu Tendou
 ## Credits
 **Special Thanks:**
 * **Nintendo:** For creating *New Super Mario Bros. Wii*.
