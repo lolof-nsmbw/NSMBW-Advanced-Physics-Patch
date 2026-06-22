@@ -1,0 +1,84 @@
+=========================================================
+NSMBW Advanced Physics & Movement Patch v1.0.0
+=========================================================
+
+=== ⚠️ IMPORTANT DISCLAIMER & REQUIREMENTS ⚠️ ===
+
+* HARDWARE WARNING: Full disclosure—this entire project was developed and tested exclusively on the Dolphin Emulator. It has NOT been tested on real Wii hardware yet. While it runs perfectly on Dolphin, I cannot guarantee it won't crash on an actual console. If you try it on a real Wii, please let me know the results!
+* SUPPORTED VERSIONS: This patch ONLY works with NTSC-U Rev 1 (SMNE01) or PAL Rev 2 (SMNP01).
+
+=== HOW TO INSTALL (For Dolphin / Wii) ===
+
+Step 1: Extract this ZIP file to your computer.
+Step 2: Copy the "NewerRes" and "riivolution" folders.
+Step 3: Paste them directly onto the ROOT of your SD card. 
+        (If it asks to merge or overwrite folders, select "Yes").
+Step 4: Insert the SD card into your Wii (or mount it in Dolphin).
+Step 5: Open the Riivolution app on your Wii.
+Step 6: Set the "Advanced Physics Patch" option to "Enabled" and click Launch!
+
+=== 🚨 CRASH WARNINGS & COMPATIBILITY 🚨 ===
+
+This patch will CRASH or conflict under these conditions:
+1. Memory Overlap: This patch heavily uses the memory area from 0x80001800 to 0x80003800. If another mod (such as Super Luigi Land Wii) uses this same space for custom code blocks, the game will crash immediately.
+2. Hook Conflicts: If another mod intercepts the vanilla damage calculation function using the same address (e.g., mkwcat's dynamic .rel injection), the game will crash. 
+
+(Please refer to the README.md for advanced instructions on how to resolve memory overlaps and recompile the patch).
+
+=== USAGE GUIDELINES ===
+
+You are completely free to play and enjoy this patch privately. 
+However, if you integrate this patch into a published custom hack, a Kaizo level pack, or showcase it in a YouTube video/stream, please credit me and provide a link back to the GitHub repository or YouTube channel.
+
+
+=== Developer's Notes : Behind the Scenes ===
+
+To be completely honest, I'm just a beginner. I started learning reverse engineering and Kamek completely from scratch in March, using my free time. Because of this, I know my current codebase is probably a bit of a mess—it's full of hardcoded addresses, hacky workarounds, and it's a nightmare to maintain across different game regions lol. I still don't have a profound understanding of the Kamek compiler, so whenever I hit a wall, I just brute-forced it. Please bear with my spaghetti code! Any programming advice or PRs are more than welcome.
+
+Here is a quick timeline of how this patch came to be:
+
+March: The Spin Jump Struggle
+I've always loved the Kaizo mechanics in SMW and SMM (like the spin jump), but NSMBW completely lacked the "bounce on spikes safely" mechanic. So, I started reverse-engineering it.
+The biggest headache? In NSMBW, the spin input (shake/motion control) is a pulse signal, not a continuous button hold. So, I couldn't read how long the player was holding the button to determine jump height.
+My workaround:
+* Grounded Spin Jumps: The height is determined by the player's X-axis velocity at the exact moment of jumping (divided into 3 tiers: 3, 4, and 4.3 blocks high).
+* Bouncing Spin Jumps: This is much smoother. It uses the normal Jump button to control height perfectly.
+* The SMW Hover Mechanic: I introduced two gravity states (setNormalGravity and setButtonGravity). If you don't hold Jump during the descent, you fall normally. If you hold it, you get that classic SMW hover effect.
+(Fun tech fact: If you want a perfectly controlled low spin jump PLUS the hover effect, you have to do a crazy input: short-press jump, release it instantly to set the low height, and then immediately hold jump again to trigger the hover during the descent haha. If you just want max height and distance, just hold it down!).
+Check out this video to see the hover in action: https://www.youtube.com/watch?v=8yRzSO4GCf4
+
+April: Yoshi's Revenge
+Developed the Yoshi enhancement patch. Yoshi can now bounce on spikes and walk on Munchers. Also fixed a vanilla bug where Yoshi takes damage from Cooligans. I’m guessing Nintendo never actually placed Yoshi and Cooligans in the same level, so they didn't even bother programming the interaction haha!
+
+May: The Up-Throw Evolution
+In early May, 2Maliao pointed me toward the NewerGEM repository. Looking through it, I discovered it included an up-throw mechanic. It was exactly what I needed for Kaizo level design! I studied their code and merged it with a new "instant drop" mechanic for shells and bombs.
+After extensive testing, I noticed NewerGEM's foundation had some quirks, so I heavily modified it:
+* Fixed a bug where you would get damaged by a shell during a spin jump and couldn't grab it.
+* Fixed up-thrown shells bouncing off walls at full speed (looked unnatural).
+* Vanilla I-frames restored: In vanilla NSMBW, kicking a sleeping shell gives the player about 16 frames of invincibility. I dug into the assembly and added this back into the up-throw logic for a much smoother gameplay experience.
+* Bomb Trajectories: The original bomb up-throw trajectory felt wonky (they would slide against ceilings). I completely overhauled the bomb physics to make them look natural and fixed the issue where mid-air bombs couldn't be re-grabbed.
+* Expanded the up-throw logic to POWs, Springs, and Propeller blocks.
+(Regrettably, I still haven't figured out how to fix the NewerGEM bug where up-thrown items don't interact with certain blocks, nor do I know how to add custom up-throw animations yet.)
+
+What's Next?
+Right now, I'm heavily researching the "front-carry" mechanics for items. If I make any breakthroughs, I'll release the code and patch ASAP.
+
+Bug Reports & Feedback:
+Since this entire project was coded and tested solely by me, some bugs have inevitably slipped through the cracks. Aside from the known issues already listed in the README.md, if you run into any new glitches or crashes during your gameplay, please reach out and let me know. Your feedback is hugely appreciated!
+
+Thank you all for playing, and I hope this patch brings endless possibilities to your gameplay or level design!
+
+===  CREDITS ===
+
+Special Thanks:
+* Nintendo: For creating New Super Mario Bros. Wii.
+* Newer Team: For the NewerSMBW and foundational modding tools.
+* Luke, RedStoneMatt & zement: For the original upward-throwing shell logic and publishing the foundational NewerGEM codebase.
+* RoadrunnerWMC, RootCubed & CHN Symbol Map Contributors: For the invaluable symbol map resources, which greatly aided in reverse engineering.
+* Lele: My friend and veteran SMM Kaizo player, for providing deep insights into advanced gameplay mechanics and inspiring the new movement features.
+* 2Maliao: For code collaboration, sharing modding assets, and continuous technical discussion.
+
+=========================================================
+GitHub Repository:  https://github.com/lolof-nsmbw/NSMBW-Advanced-Physics-Patch/tree/main 
+YouTube Channel:  https://www.youtube.com/@ArisuTendou-l3l
+Discord Link: https://discordapp.com/users/1338165547753275457
