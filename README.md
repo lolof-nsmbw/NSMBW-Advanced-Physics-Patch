@@ -15,7 +15,7 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 > [!IMPORTANT]
 > **Disclaimer & Feedback:**
 > This patch is currently being developed and playtested almost entirely by me as a solo developer. While I strive for stability, some bugs may inevitably slip through. 
-> If you encounter any bugs or crashes, I would highly appreciate your feedback via GitHub Issues or Discord! **However, before reporting a crash, please ensure it is NOT caused by mod memory conflicts** (Please read the [Compatibility & Conflicts](#compatibility--usage-notes) section carefully to save us both time).
+> If you encounter any bugs or crashes, I would highly appreciate your feedback via GitHub Issues or [Discord](https://discordapp.com/users/1338165547753275457)! **However, before reporting a crash, please ensure it is NOT caused by mod memory conflicts** (Please read the [Compatibility & Conflicts](#compatibility--usage-notes) section carefully to save us both time).
 
 ---
 
