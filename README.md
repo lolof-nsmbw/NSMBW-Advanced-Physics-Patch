@@ -31,35 +31,34 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 
 ## Features
 
-### 1. SMW-Style Spin Jump
+<details>
+<summary><b>1. SMW-Style Spin Jump (Click to expand details)</b></summary>
+
 * **Spike Immunity:** You can now safely spin-bounce on spiky enemies and objects without taking damage! 
 * **Variable Height Control:** Spin jump height is now dynamic based on how long you hold the jump button.
 * **Delayed Descent:** Holding the jump button during a spin jump reduces fall speed (hovering effect, just like in *Super Mario World*). Releasing the button immediately cancels the delay, returning you to normal fall speed.
 
 > [!TIP]
-> ** The Golden Rule of Spin Jumping:**
-> This mechanic is strictly designed for physical and **Spike-type** hazards. It will **NOT** protect you from ethereal or energy-based hazards like Ghosts (Boos), Fire, or Electric enemies (Amps). 
+> **💡 The Golden Rule of Spin Jumping:** This mechanic is strictly designed for physical and **Spike-type** hazards. It will **NOT** protect you from ethereal or energy-based hazards like Ghosts (Boos), Fire, or Electric enemies (Amps). 
 > *Kaizo Exception: The **Fire Snake** is the ONE and ONLY exception to this rule and is fully bounceable! (A deliberate design choice for better Kaizo level flow).*
 
-<details>
-<summary><b>🟢 Click to view the Supported Spin-Bounce Whitelist</b></summary>
-
+**🟢 Supported Spin-Bounce Whitelist**
 *(Mario's Spin Jump now covers EVERYTHING Yoshi can safely bounce on, plus classic spin-jump targets. Including but not limited to:)*
-* **Spiky & Prickly Foes:** Spinies, Every kind of Piranha Plants, Prickly Goombas, Fuzzies (Line Controlled), Bramballs, Urchins & Mega Urchins
+* **Spiky & Prickly Foes:** Spinies, Every kind of Piranha Plants, Prickly Goombas, Fuzzies (including Line Controlled), Bramballs, Urchins & Mega Urchins
 * **Heavy & Metallic Hazards:** Thwomps, Big Thwomps, Chain Chomps, Spiked Balls, Giant Spiked Balls, Spiked Balls on a Chain
 * **Aquatic Foes (Surface-level):** Fishbones, Bloopers, Cheep Cheeps, Spiny Cheep Cheeps, Porcupuffers
 * **Bosses:** All 7 Koopaling Shells (Larry, Wendy, Iggy, Lemmy, Morton, Roy, Ludwig)
 * **The Kaizo Exception:** Fire Snakes
 </details>
 
-### 2. Yoshi Enhanced
+<details>
+<summary><b>2. Yoshi Enhanced (Click to expand details)</b></summary>
+
 * **Spiked Enemy Bouncing:** Yoshi's vanilla bouncing capabilities have been massively expanded. Just like in SMW, Yoshi can now safely bounce on heavily spiked and previously un-bounceable enemies!
 * **Cooligan Fix:** Fixed a vanilla bug where Yoshi would take damage from Cooligans. Yoshi can now crush them safely.
 * **Terrain Immunity:** Yoshi is no longer afraid of spiked floors or Munchers.
 
-<details>
-<summary><b>🟢 Click to view the Yoshi Enhanced Bouncing Whitelist</b></summary>
-
+**🟢 Yoshi Enhanced Bouncing Whitelist**
 *(Enemies added to Yoshi's safe-bounce logic in this patch)*
 * **Spiky & Prickly Foes:** Prickly Goombas, Fuzzies (Line Controlled), Bramballs, Urchins & Mega Urchins
 * **Heavy & Metallic Hazards:** Thwomps, Big Thwomps, Spiked Balls, Giant Spiked Balls, Spiked Balls on a Chain
@@ -68,13 +67,19 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 * **The Kaizo Exception:** Fire Snakes
 </details>
 
-### 3. Dynamic Climbing Jumps
-* Optimized the jump height when detaching from **climbable terrain**. Instead of the vanilla fixed 2-block height, it now features a **dynamic 2-4 block height** controlled entirely by the player's button input.
+<details>
+<summary><b>3. Dynamic Climbing Jumps (Click to expand details)</b></summary>
 
-### 4. Up-Throw & Instant Drop Mechanics
+* Optimized the jump height when detaching from **climbable terrain**. Instead of the vanilla fixed 2-block height, it now features a **dynamic 2-4 block height** controlled entirely by the player's button input.
+</details>
+
+<details>
+<summary><b>4. Up-Throw & Instant Drop Mechanics (Click to expand details)</b></summary>
+
 * **Item Up-Throw:** Players can now throw items directly upwards! Supported items include: Shells, Bombs, Glow Blocks, Propeller Blocks, POW Blocks, and Springs.
 * **Instant Drop:** Pressing down allows players to instantly drop Shells and Bombs at your feet.
 * **Momentum Inheritance:** Up-thrown and dropped items inherit the player's X-axis velocity in a certain proportion for realistic physics trajectories.
+</details>
 
 ---
 
@@ -108,7 +113,7 @@ Due to the technical complexities of the NSMBW engine, the following issues curr
 3. Up-thrown shells sometimes clip through blocks or fail to trigger block interactions correctly.
 4. Spin-jump bouncing may fail to trigger on certain enemies if the player is currently in damage I-frames (invincibility frames).
 5. Certain custom enemies in the *NewerSMBW* engine may still damage the player during a spin jump.
-6. Yoshi attempting to bounce on the Spike/Stone thrown by Spikes fails to trigger the bounce mechanic for unknown reasons.
+6. Yoshi attempting to bounce on the Spike Balls (Iron Balls) thrown by Spikes fails to trigger the bounce mechanic for unknown reasons.
 7. Up-throwing an item still uses the vanilla forward-throw player animation. *(I am not an animator, so if anyone can make a custom upward-throwing animation, contributions are welcome!)*
 
 ---
@@ -134,6 +139,7 @@ For detailed information on how to adapt, port, or recompile this codebase for y
 ---
 
 ## Credits
+**Special Thanks:**
 * **Nintendo:** For creating *New Super Mario Bros. Wii*.
 * **Newer Team:** For the *NewerSMBW* engine and foundational modding tools.
 * **Luke, RedStoneMatt & zement:** For the original upward-throwing shell logic and publishing the foundational NewerGEM codebase.
