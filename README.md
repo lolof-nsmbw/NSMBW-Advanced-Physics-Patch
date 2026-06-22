@@ -13,8 +13,8 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 ---
 
 > [!IMPORTANT]
-> **Disclaimer & Feedback:** > This patch is currently being developed and playtested almost entirely by me as a solo developer. While I strive for stability, some bugs may inevitably slip through. 
-> 
+> **Disclaimer & Feedback:**
+> This patch is currently being developed and playtested almost entirely by me as a solo developer. While I strive for stability, some bugs may inevitably slip through. 
 > If you encounter any bugs or crashes, I would highly appreciate your feedback via GitHub Issues or Discord! **However, before reporting a crash, please ensure it is NOT caused by mod memory conflicts** (Please read the [Compatibility & Conflicts](#compatibility--usage-notes) section carefully to save us both time).
 
 ---
@@ -37,7 +37,8 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 * **Delayed Descent:** Holding the jump button during a spin jump reduces fall speed (hovering effect, just like in *Super Mario World*). Releasing the button immediately cancels the delay, returning you to normal fall speed.
 
 > [!TIP]
-> **💡 The Golden Rule of Spin Jumping:** > This mechanic is strictly designed for physical and **Spike-type** hazards. It will **NOT** protect you from ethereal or energy-based hazards like Ghosts (Boos), Fire, or Electric enemies (Amps). 
+> ** The Golden Rule of Spin Jumping:**
+> This mechanic is strictly designed for physical and **Spike-type** hazards. It will **NOT** protect you from ethereal or energy-based hazards like Ghosts (Boos), Fire, or Electric enemies (Amps). 
 > *Kaizo Exception: The **Fire Snake** is the ONE and ONLY exception to this rule and is fully bounceable! (A deliberate design choice for better Kaizo level flow).*
 
 <details>
@@ -74,7 +75,7 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 * **Item Up-Throw:** Players can now throw items directly upwards! Supported items include: Shells, Bombs, Glow Blocks, Propeller Blocks, POW Blocks, and Springs.
 * **Instant Drop:** Pressing down allows players to instantly drop Shells and Bombs at your feet.
 * **Momentum Inheritance:** Up-thrown and dropped items inherit the player's X-axis velocity in a certain proportion for realistic physics trajectories.
-* 
+
 ---
 
 ## Compatibility & Usage Notes
@@ -128,7 +129,7 @@ I will gradually look into the "Known Issues" listed above, prioritizing the "lo
 > [!IMPORTANT]
 > The source code provided in this repository is currently intended as a **logic reference** rather than a plug-and-play build environment due to mixed region hardcoding and custom Kamek syntax. 
 
-For detailed information on how to adapt, port, or recompile this codebase for your own projects, please refer to our **[Developer & Compilation Guide](docs/DEVELOPMENT.md)** *(Note: You will need to create this file in your repo)*.
+For detailed information on how to adapt, port, or recompile this codebase for your own projects, please refer to our **[Developer & Compilation Guide](docs/DEVELOPMENT.md)** 
 
 ---
 
