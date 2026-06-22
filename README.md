@@ -6,9 +6,9 @@
 ![Toolchain](https://img.shields.io/badge/Toolchain-Kamek-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-An advanced physics and movement patch for *New Super Mario Bros. Wii* (NSMBW). This project was created to enrich the vanilla physics engine with new mechanics, expanding creative possibilities for level designers (especially for **Kaizo hacks**) and enhancing overall gameplay. Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it in your videos! If you do, I would greatly appreciate it if you could credit me or link back to this repository.
-
+An advanced physics and movement patch for *New Super Mario Bros. Wii* (NSMBW). This project was created to enrich the vanilla physics engine with new mechanics, expanding creative possibilities for level designers (especially for **Kaizo hacks**) and enhancing overall gameplay. 
 This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks via a simple Riivolution XML.
+Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it in your videos! If you do, I would greatly appreciate it if you could credit me or link back to this repository.
 
 ---
 
