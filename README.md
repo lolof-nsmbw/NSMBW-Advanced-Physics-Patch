@@ -138,8 +138,10 @@ For detailed information on how to adapt, port, or recompile this codebase for y
 
 ---
 
-**Lead Developer:** Arisu Tendou
-## Credits
+## About & Credits
+
+**Lead Developer:** [Arisu Tendou](https://www.youtube.com/@ArisuTendou-l3l)
+
 **Special Thanks:**
 * **Nintendo:** For creating *New Super Mario Bros. Wii*.
 * **Newer Team:** For the *NewerSMBW* engine and foundational modding tools.
