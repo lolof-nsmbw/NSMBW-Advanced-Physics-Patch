@@ -1,8 +1,11 @@
 #include <common.h>
 #include <game.h>
 
+// 原版重力结算函数指针
 #define setButtonJumpGravity ((void (*)(void*))0x8004C560)
 #define setNormalJumpGravity ((void (*)(void*))0x8004C620)
+
+// 自定义状态标记，迁移至安全的内存空地避免冲突
 #define IS_SPIN_BOUNCING (*(volatile u8*)0x800026E0)
 #define PREV_SPEED_Y     (*(volatile u32*)0x800026E4) 
 
@@ -34,6 +37,7 @@ extern "C" void ApplyVariableSpinJumpVelocity(daPlBase_c* player) {
     }
 }
 
+// 劫持原版旋转跳初始化指令大门，执行速度改写
 extern "C" asm void Hook_InitSpinJumpVel_ASM() {
     nofralloc
     stfs f1, 0x00EC(r29)
@@ -56,6 +60,7 @@ extern "C" asm void Hook_InitSpinJumpVel_ASM() {
     bctr
 }
 
+// 劫持每帧的重力结算循环，处理按键长按的高度补偿以及踩踏敌人后的动量继承
 extern "C" void HookB_SpinGravity(daPlBase_c* player) {
     float currentSpeedY = *(float*)((u32)player + 0x00EC);
     u32 currentSpeedY_u32 = *(u32*)((u32)player + 0x00EC);
@@ -69,6 +74,7 @@ extern "C" void HookB_SpinGravity(daPlBase_c* player) {
     u32 inputMask = *(u32*)((u32)player + 0xEA8);
     bool isMovingUp = (currentSpeedY_u32 < 0x80000000);
 
+    // 针对正在上升且处于旋转跳状态的玩家，检测跳跃键保持状态
     if (actionState == 0x42 && isMovingUp && currentSpeedY_u32 >= 0x40800000) {
         if ((inputMask & 0x01000100) != 0) {
             setButtonJumpGravity(player);
@@ -78,13 +84,13 @@ extern "C" void HookB_SpinGravity(daPlBase_c* player) {
         PREV_SPEED_Y = currentSpeedY_u32;
         return; 
     }
-
+    // 动量突变检测：若Y轴速度突然大幅增加，判定为踩踏了敌人触发了弹跳
     if (isMovingUp && (currentSpeedY_u32 >= 0x40700000) && (diff_u32 < 0x80000000) && (diff_u32 > 0x3DCCCCCD)) {
         IS_SPIN_BOUNCING = 1; 
     }
     
     PREV_SPEED_Y = currentSpeedY_u32;
-
+    // 下降阶段处理
     if (currentSpeedY_u32 >= 0x80000000) { 
         if ((inputMask & 0x01000000) != 0) { 
             return; 

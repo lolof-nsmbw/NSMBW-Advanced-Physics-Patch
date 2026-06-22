@@ -27,6 +27,7 @@
 // #define ADDR_RET_DAMAGE_LO    0x62C4
 
 #define SPIN_TIMER (*(volatile int*)0x80001F00)
+// 检查玩家是否长按跳跃键，用于区分大跳和小跳的重力反馈
 extern "C" int ApplySpinBounceNozzle(daPlBase_c* player) {
     if (SPIN_TIMER > 10 || SPIN_TIMER < 0) SPIN_TIMER = 0;
     if (SPIN_TIMER > 0) {
@@ -39,6 +40,7 @@ extern "C" int ApplySpinBounceNozzle(daPlBase_c* player) {
     return 0; 
 }
 
+// 劫持速度结算逻辑，根据 ApplySpinBounceNozzle 的返回值应用不同的 Y 轴动量 (f1)
 extern "C" asm void Nozzle_Hook() {
     nofralloc
     stwu r1, -0x20(r1)
@@ -74,11 +76,12 @@ _EndHook:
     bctr
 }
 
+// 检查旋转跳是否成功踩踏普通敌人，若是则触发弹跳并播放原版音效
 extern "C" bool CheckSpinJumpBounce(dEn_c* self, ActivePhysics* apThis, ActivePhysics* apOther) {
     if (!apOther || !apOther->owner || !apThis || !self) return false;
     dStageActor_c* actor = (dStageActor_c*)apOther->owner;
 
-    if (actor->name == 13) { 
+    if (actor->name == 13) {  // 确认碰撞对象是玩家
         daPlBase_c* player = (daPlBase_c*)actor;
         typedef bool (*TestFlagFunc)(daPlBase_c*, int);
         TestFlagFunc checkTestFlag = (TestFlagFunc)ADDR_CHECK_TEST_FLAG; 
@@ -90,7 +93,7 @@ extern "C" bool CheckSpinJumpBounce(dEn_c* self, ActivePhysics* apThis, ActivePh
             u32 tolInt = 0x41400000; 
             float tolerance = *(float*)&tolInt;
 
-            if (marioBottom >= (enemyTop - tolerance)) {
+            if (marioBottom >= (enemyTop - tolerance)) {  // 若判定为有效踩踏，触发弹跳
                 typedef void (*BounceFunc)(dEn_c*, void*);
                 BounceFunc standardBounce = (BounceFunc)ADDR_STANDARD_BOUNCE; 
                 SPIN_TIMER = 1; 
@@ -100,7 +103,7 @@ extern "C" bool CheckSpinJumpBounce(dEn_c* self, ActivePhysics* apThis, ActivePh
                 typedef void (*SoundFunc)(void*, int, void*, int);
                 SoundFunc playSound = (SoundFunc)ADDR_SOUND_PLAYER; 
                 void* soundEngine = *(void**)ADDR_SOUND_ENGINE;     
-                playSound(soundEngine, 353, centerPos, 0); 
+                playSound(soundEngine, 353, centerPos, 0);  // 触发弹跳音效
                 
                 return true; 
             }
@@ -157,6 +160,8 @@ _NormalCollision:
 _SpinJumped:
     blr
 }
+
+// 危险敌人白名单判定。如果是旋转跳踩踏，则转化伤害为弹跳
 extern "C" bool CheckSpecialDamageShield(daPlBase_c* player, ActivePhysics* apThis, ActivePhysics* apOther) {
     if (!player || !apThis || !apOther) return false;
     if (!apThis->owner) return false;
@@ -192,12 +197,13 @@ extern "C" bool CheckSpecialDamageShield(daPlBase_c* player, ActivePhysics* apTh
             void* soundEngine = *(void**)ADDR_SOUND_ENGINE;
             playSound(soundEngine, 353, centerPos, 0);
             
-            return true; 
+            return true;  // 成功拦截伤害
         }
     }
     return false; 
 }
 
+// 劫持伤害结算大门。如果护盾生效，拦截原始伤害逻辑并将 r3 清零
 extern "C" asm void Master_Damage_Hook() {
     nofralloc
     stwu r1, -0x20(r1)

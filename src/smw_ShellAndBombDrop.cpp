@@ -73,7 +73,7 @@ int CheckCustomDrop(void* player) {
 
     if (!player) return 0;
     u32 heldButtons = *(u32*)((u32)player + 0xEA8);
-    if ((heldButtons & 0x00010000) == 0) return 0; // Check if DOWN is pressed
+    if ((heldButtons & 0x00010000) == 0) return 0; // 检查是否按了下键
 
     u32 carryId = *(u32*)((u32)player + OFF_PLAYER_CARRYID);
     if (carryId == 0) return 0;
@@ -148,7 +148,7 @@ int CheckCustomDrop(void* player) {
         ((void (*)(dActor_c*, u32))stateChangeFunc)(carried, STATE_BOMB_WALK);
     }
 
-    *(u32*)((u32)player + 0xEB8) = 0x00010000;
+    *(u32*)((u32)player + 0xEB8) = 0x00010000; // 解决空中下放龟壳/炸弹后出现玩家瞬间下坐的问题
     
     return 1;
 }
