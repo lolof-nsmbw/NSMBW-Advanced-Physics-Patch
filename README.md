@@ -129,7 +129,7 @@ I will gradually look into the "Known Issues" listed above, prioritizing the "lo
 > [!IMPORTANT]
 > The source code provided in this repository is currently intended as a **logic reference** rather than a plug-and-play build environment due to mixed region hardcoding and custom Kamek syntax. 
 
-For detailed information on how to adapt, port, or recompile this codebase for your own projects, please refer to our **[Developer & Compilation Guide](docs/DEVELOPMENT.md)** 
+For detailed information on how to adapt, port, or recompile this codebase for your own projects, please refer to the source code and comments directly.
 
 ---
 
