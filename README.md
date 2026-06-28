@@ -1,7 +1,6 @@
 # NSMBW Advanced Physics & Movement Patch
 
 ![Game](https://img.shields.io/badge/Game-NSMBW-red)
-![Versions](https://img.shields.io/badge/Versions-NTSC--U%20Rev1%20%7C%20PAL%20Rev2-ff69b4)
 ![Compiler](https://img.shields.io/badge/Compiler-CodeWarrior-yellow)
 ![Toolchain](https://img.shields.io/badge/Toolchain-Kamek-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -34,21 +33,13 @@ This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks
 
 ## Compatibility & Usage Notes (For Releases)
 
-The `Release` tab contains ready-to-use XML patches. 
-* **Supported Versions:** NTSC Rev 1 (`SMNE01`) and PAL Rev 2 (`SMNP01`).
-* **Riivolution Ready:** Simply drop the `.xml` file into your SD card's `riivolution` folder, and place the `.bin` patch files in the designated directory.
+The `Release` tab contains ready-to-use compiled packages. 
+* **Supported Versions:** Fully cross-region compatible! Supports all versions of NSMBW (NTSC-U, PAL, NTSC-J, NTSC-K, NTSC-W).
+* **Riivolution Ready:** Simply drop the contents into your SD card, which will load the custom `loader.bin` through Riivolution.
 
 > [!WARNING]
-> **Important Compatibility Warnings:** This patch can be mixed with many other XML mods, but **WILL CONFLICT** under the following conditions:
-> 
-> 1. **Hook Conflicts:** If another mod intercepts the vanilla damage calculation function using the same address (e.g., `mkwcat`'s dynamic `.rel` injection for death/damage messages), features in this patch will fail or cause the game to crash. You will need to manually recompile conflicting code to make them compatible.
-> 2. **Memory Overlap:** This patch heavily utilizes the free memory area from `0x80001800` to `0x80003800`. If another mod (such as *Super Luigi Land Wii*) uses this same memory space for custom code blocks or `loader.bin`, **the game will crash immediately**. 
-
-> [!TIP]
-> **How to fix memory overlaps:** You can resolve this using **ONE** of the following methods:
-> * Relocating the conflicting mod's payload to a different free memory region.
-> * Recompiling our patch with a new base address.
-> * Merging our source code directly into your project and compiling everything together into a single `loader.bin`.
+> **Important Compatibility Warnings:** 
+> If another mod intercepts the exact same vanilla functions (e.g., modifying the original damage calculation address), the features will conflict.
 
 ---
 
@@ -64,12 +55,10 @@ Due to the technical complexities of the NSMBW engine, the following issues curr
 
 ## Note for Developers (Compilation & Source Code)
 
-> [!IMPORTANT]
-> The source code provided in this repository is currently intended as a **logic reference** rather than a plug-and-play build environment. Due to the iterative nature of this reverse-engineering process:
-> * **Mixed Region Hardcoding:** Some `.cpp` and `.S` files contain hardcoded absolute addresses for the PAL version, while others are for the NTSC version. 
-> * **Custom Kamek Syntax:** Certain files were compiled using a customized fork of the Kamek compiler, meaning out-of-the-box compilation with the vanilla Kamek toolchain may result in syntax errors or linker failures.
->
-> **If you want to use this code in your own project:** You are highly encouraged to read the core logic and adapt/port the hooks to your own project's symbol maps.
+This project has been massively refactored into a modern **Kamek 2** environment. 
+* **100% C++ & Clean Macros:** Almost all messy absolute memory hardcoding has been eradicated. 
+* **Symbol Map Integration:** Hooks dynamically adapt to different region offsets during compilation.
+* **Plug and Play:** You can easily clone this repository, drop the source files into your Kamek 2.0 build environment. Feel free to explore, merge, and expand upon this codebase!
 
 ---
 

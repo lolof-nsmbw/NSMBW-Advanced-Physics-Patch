@@ -1,109 +1,47 @@
-#include <common.h>
-#include <game.h>
-// america
-#define ADDR_CHECK_TEST_FLAG  2147839216 
-#define ADDR_STANDARD_BOUNCE  2148099856 
-#define ADDR_SOUND_PLAYER     0x80198FC0
-#define ADDR_SOUND_ENGINE     0x80429D5C
-#define ADDR_RET_NOZZLE_HI    0x8012
-#define ADDR_RET_NOZZLE_LO    0x8118
+// Adapted for PropelParts. 
+#include <kamek.h>
+#include <game/bases/d_enemy.hpp>
+#include <game/bases/d_a_player_base.hpp>
+#include <game/bases/d_cc.hpp>
+#include <game/bases/d_actor.hpp>
 
-#define ADDR_RET_PHYSICS_HI   0x8009
-#define ADDR_RET_PHYSICS_LO   0x5C24
+// --- 外部符号声明 (由 externals.txt 解析) ---
+extern "C" bool CheckTestFlag(daPlBase_c* player, int flag);
+extern "C" void StandardSpinBounce(void* a, void* b); // 修复了参数类型冲突
+extern "C" void PlaySound(void* soundEngine, int soundId, void* pos, int unk);
+extern "C" void* gSoundEngine; 
 
-#define ADDR_RET_DAMAGE_HI    0x8014
-#define ADDR_RET_DAMAGE_LO    0x6184
+// --- 状态机大一统 ---
+// 直接复用 variablespinjump.cpp 里全局跳跃状态变量！
+// 这样当这里触发踩踏时，那边的物理文件会自动接管高度计算，彻底解耦！
+extern "C" volatile u8 IS_SPIN_BOUNCING; 
 
-// europe
-// #define ADDR_CHECK_TEST_FLAG  2147839216
-// #define ADDR_STANDARD_BOUNCE  2148099856 
-// #define ADDR_SOUND_PLAYER     0x80199100 
-// #define ADDR_SOUND_ENGINE     0x8042A03C 
-// #define ADDR_RET_NOZZLE_HI    0x8012
-// #define ADDR_RET_NOZZLE_LO    0x8258
-// #define ADDR_RET_PHYSICS_HI   0x8009
-// #define ADDR_RET_PHYSICS_LO   0x5C24
-// #define ADDR_RET_DAMAGE_HI    0x8014
-// #define ADDR_RET_DAMAGE_LO    0x62C4
+// ========================================================================
+// 踩踏判定逻辑
+// ========================================================================
+extern "C" bool CheckSpinJumpBounce(dEn_c* self, dCc_c* apThis, dCc_c* apOther) {
+    if (!apOther || !apOther->mpOwner || !apThis || !self) return false;
+    dActor_c* actor = (dActor_c*)apOther->mpOwner;
 
-#define SPIN_TIMER (*(volatile int*)0x80001F00)
-// 检查玩家是否长按跳跃键，用于区分大跳和小跳的重力反馈
-extern "C" int ApplySpinBounceNozzle(daPlBase_c* player) {
-    if (SPIN_TIMER > 10 || SPIN_TIMER < 0) SPIN_TIMER = 0;
-    if (SPIN_TIMER > 0) {
-        SPIN_TIMER = 0; 
-        if (player) {
-            u32 input = *(u32*)((u32)player + 0xEA8);
-            if ((input & 0x01000000) == 0) return 1; 
-        }
-    }
-    return 0; 
-}
-
-// 劫持速度结算逻辑，根据 ApplySpinBounceNozzle 的返回值应用不同的 Y 轴动量 (f1)
-extern "C" asm void Nozzle_Hook() {
-    nofralloc
-    stwu r1, -0x20(r1)
-    mflr r0
-    stw r0, 0x1C(r1)
-    stw r3, 0x08(r1)
-    stfs f1, 0x10(r1)
-
-    mr r3, r29 
-    bl ApplySpinBounceNozzle
-    cmpwi r3, 1
-    beq _SmallJump
-
-_NormalJump:
-    lfs f1, 0x10(r1)
-    b _EndHook
-
-_SmallJump:
-    lis r3, 0x402C 
-    stw r3, 0x14(r1)
-    lfs f1, 0x14(r1)
-
-_EndHook:
-    lwz r3, 0x08(r1)
-    lwz r0, 0x1C(r1)
-    mtlr r0
-    addi r1, r1, 0x20
-    stfs f1, 0x00EC(r29) 
-    
-    lis r12, ADDR_RET_NOZZLE_HI
-    ori r12, r12, ADDR_RET_NOZZLE_LO
-    mtctr r12
-    bctr
-}
-
-// 检查旋转跳是否成功踩踏普通敌人，若是则触发弹跳并播放原版音效
-extern "C" bool CheckSpinJumpBounce(dEn_c* self, ActivePhysics* apThis, ActivePhysics* apOther) {
-    if (!apOther || !apOther->owner || !apThis || !self) return false;
-    dStageActor_c* actor = (dStageActor_c*)apOther->owner;
-
-    if (actor->name == 13) {  // 确认碰撞对象是玩家
+    if (actor->mProfName == 13) { 
         daPlBase_c* player = (daPlBase_c*)actor;
-        typedef bool (*TestFlagFunc)(daPlBase_c*, int);
-        TestFlagFunc checkTestFlag = (TestFlagFunc)ADDR_CHECK_TEST_FLAG; 
         u32* spinFlag = (u32*)((u32)player + 0x123C);
 
-        if (checkTestFlag(player, 10) && (*spinFlag & 2048)) { 
-            float enemyTop = self->pos.y + apThis->info.yDistToCenter + apThis->info.yDistToEdge;
-            float marioBottom = player->pos.y + apOther->info.yDistToCenter - apOther->info.yDistToEdge;
+        if (CheckTestFlag(player, 10) && (*spinFlag & 2048)) { 
+            // 修复 pos 报错：现代反编译头文件中为 mPos
+            float enemyTop = self->mPos.y + apThis->mCcData.mBase.mOffset.y + apThis->mCcData.mBase.mSize.y;
+            float marioBottom = player->mPos.y + apOther->mCcData.mBase.mOffset.y - apOther->mCcData.mBase.mSize.y;
             u32 tolInt = 0x41400000; 
             float tolerance = *(float*)&tolInt;
 
-            if (marioBottom >= (enemyTop - tolerance)) {  // 若判定为有效踩踏，触发弹跳
-                typedef void (*BounceFunc)(dEn_c*, void*);
-                BounceFunc standardBounce = (BounceFunc)ADDR_STANDARD_BOUNCE; 
-                SPIN_TIMER = 1; 
-                standardBounce(self, player); 
+            if (marioBottom >= (enemyTop - tolerance)) {
+                StandardSpinBounce(self, player); 
                 
+                // 统一状态机！通知动量控制模块给与正确的 Y 轴速度
+                IS_SPIN_BOUNCING = 1; 
+
                 float centerPos[3] = {0.0f, 0.0f, 0.0f}; 
-                typedef void (*SoundFunc)(void*, int, void*, int);
-                SoundFunc playSound = (SoundFunc)ADDR_SOUND_PLAYER; 
-                void* soundEngine = *(void**)ADDR_SOUND_ENGINE;     
-                playSound(soundEngine, 353, centerPos, 0);  // 触发弹跳音效
+                PlaySound(gSoundEngine, 353, centerPos, 0);
                 
                 return true; 
             }
@@ -112,7 +50,52 @@ extern "C" bool CheckSpinJumpBounce(dEn_c* self, ActivePhysics* apThis, ActivePh
     return false;
 }
 
-extern "C" asm void Universal_SpinJump_Hook(dEn_c* self, ActivePhysics* apThis, ActivePhysics* apOther) {
+// ========================================================================
+// 伤害拦截逻辑
+// ========================================================================
+extern "C" bool CheckSpecialDamageShield(daPlBase_c* player, dCc_c* apThis, dCc_c* apOther) {
+    if (!player || !apThis || !apOther) return false;
+    if (!apThis->mpOwner) return false;
+    
+    dActor_c* attacker = (dActor_c*)apThis->mpOwner;
+    bool isWhitelisted = false;
+    switch(attacker->mProfName) {
+        case 0x011C: case 0x011D: case 0x0176: 
+        case 0x0063: case 0x0064: case 0x0065: 
+        case 0x0066: case 0x0090: case 0x00C0:
+            isWhitelisted = true;
+            break;
+    }
+
+    if (!isWhitelisted) return false; 
+    
+    u32* spinFlag = (u32*)((u32)player + 0x123C);
+    if (*spinFlag & 2048) {
+        // 修复 pos 报错
+        float enemyTop = attacker->mPos.y + apThis->mCcData.mBase.mOffset.y + apThis->mCcData.mBase.mSize.y;
+        float marioBottom = player->mPos.y + apOther->mCcData.mBase.mOffset.y - apOther->mCcData.mBase.mSize.y;
+        
+        u32 tolInt = 0x41400000; 
+        float tolerance = *(float*)&tolInt;
+        if (marioBottom >= (enemyTop - tolerance)) {
+            StandardSpinBounce(player, player); 
+            
+            // 统一状态机！
+            IS_SPIN_BOUNCING = 1;
+
+            float centerPos[3] = {0.0f, 0.0f, 0.0f};
+            PlaySound(gSoundEngine, 353, centerPos, 0);
+            
+            return true; 
+        }
+    }
+    return false; 
+}
+
+// ========================================================================
+// Inline Assembly Trampolines
+// ========================================================================
+kmBranchDefAsm(0x80095C20, 0x80095C24) {
     nofralloc
     stwu r1, -0x50(r1)
     mflr r0
@@ -129,6 +112,7 @@ extern "C" asm void Universal_SpinJump_Hook(dEn_c* self, ActivePhysics* apThis, 
     stw r12, 0x2C(r1)
     mfcr r0
     stw r0, 0x30(r1)
+
     bl CheckSpinJumpBounce
     mr r12, r3
 
@@ -152,59 +136,18 @@ extern "C" asm void Universal_SpinJump_Hook(dEn_c* self, ActivePhysics* apThis, 
 
 _NormalCollision:
     stwu r1, -0x10(r1)
-    lis r12, ADDR_RET_PHYSICS_HI
-    ori r12, r12, ADDR_RET_PHYSICS_LO
+    b _EndMacro
+
+_SpinJumped:
+    mflr r12
     mtctr r12
     bctr
 
-_SpinJumped:
+_EndMacro:
     blr
 }
 
-// 危险敌人白名单判定。如果是旋转跳踩踏，则转化伤害为弹跳
-extern "C" bool CheckSpecialDamageShield(daPlBase_c* player, ActivePhysics* apThis, ActivePhysics* apOther) {
-    if (!player || !apThis || !apOther) return false;
-    if (!apThis->owner) return false;
-    
-    dStageActor_c* attacker = (dStageActor_c*)apThis->owner;
-    bool isWhitelisted = false;
-    switch(attacker->name) {
-        case 0x011C: case 0x011D: case 0x0176: 
-        case 0x0063: case 0x0064: case 0x0065: 
-        case 0x0066: case 0x0090: case 0x00C0:
-            isWhitelisted = true;
-            break;
-    }
-
-    if (!isWhitelisted) return false; 
-    
-    u32* spinFlag = (u32*)((u32)player + 0x123C);
-    if (*spinFlag & 2048) {
-        float enemyTop = attacker->pos.y + apThis->info.yDistToCenter + apThis->info.yDistToEdge;
-        float marioBottom = player->pos.y + apOther->info.yDistToCenter - apOther->info.yDistToEdge;
-        
-        u32 tolInt = 0x41400000; 
-        float tolerance = *(float*)&tolInt;
-        if (marioBottom >= (enemyTop - tolerance)) {
-            typedef void (*BounceFunc)(void*, void*);
-            BounceFunc standardBounce = (BounceFunc)ADDR_STANDARD_BOUNCE; 
-            SPIN_TIMER = 1;
-            standardBounce(player, player); 
-            
-            float centerPos[3] = {0.0f, 0.0f, 0.0f};
-            typedef void (*SoundFunc)(void*, int, void*, int);
-            SoundFunc playSound = (SoundFunc)ADDR_SOUND_PLAYER;
-            void* soundEngine = *(void**)ADDR_SOUND_ENGINE;
-            playSound(soundEngine, 353, centerPos, 0);
-            
-            return true;  // 成功拦截伤害
-        }
-    }
-    return false; 
-}
-
-// 劫持伤害结算大门。如果护盾生效，拦截原始伤害逻辑并将 r3 清零
-extern "C" asm void Master_Damage_Hook() {
+kmBranchDefAsm(0x801462C0, 0x801462C4) {
     nofralloc
     stwu r1, -0x20(r1)
     mflr r0
@@ -234,22 +177,15 @@ _NormalDamage:
     addi r1, r1, 0x20
 
     bctrl 
-    lis r12, ADDR_RET_DAMAGE_HI
-    ori r12, r12, ADDR_RET_DAMAGE_LO
-    mtctr r12
-    bctr
+    b _EndMacro
 
 _BlockDamage:
     lwz r0, 0x1C(r1)
     mtlr r0
     addi r1, r1, 0x20
     li r3, 0 
-    lis r12, ADDR_RET_DAMAGE_HI
-    ori r12, r12, ADDR_RET_DAMAGE_LO
-    mtctr r12
-    bctr
+    b _EndMacro
+
+_EndMacro:
+    blr
 }
-
-
-
-
