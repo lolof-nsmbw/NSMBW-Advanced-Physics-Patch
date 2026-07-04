@@ -72,7 +72,7 @@ extern "C" int CheckCustomDrop(void* player) {
     
     if (profile == 56) {
         if (playerDir == 0) { 
-            if (shellDir == 0) { shellX += 6.5f; } else { shellX += 11.0f; }
+            if (shellDir == 0) { shellX += 6.5f; } else { shellX += 11.0f; } //物品放下必须给予和玩家之间的坐标偏移量
         } else {
             if (shellDir == 1) { shellX -= 7.5f; } else { shellX -= 13.5f; }
         }
@@ -85,7 +85,7 @@ extern "C" int CheckCustomDrop(void* player) {
     *(float*)((u32)carried + OFF_ACTOR_SPEED_X) = shellXSpeed;
     *(float*)((u32)carried + OFF_ACTOR_SPEED_Y) = 0.0f;
 
-    // 完美状态机切换：传入符号指针，Kamek 自动填充区服对应地址
+    // 状态机切换：传入符号指针，Kamek 自动填充区服对应地址
     if (!isBomb) {
         *(u32*)((u32)carried + 0x7D8) = 1; 
         *(u32*)((u32)carried + 0x7D4) = 1;
@@ -99,7 +99,7 @@ extern "C" int CheckCustomDrop(void* player) {
         ((void (*)(dActor_c*, void*))stateChangeFunc)(carried, StateID_Walk__12daEnBomb_c);
     }
 
-    *(u32*)((u32)player + 0xEB8) = 0x00010000; 
+    *(u32*)((u32)player + 0xEB8) = 0x00010000;  // 非常关键：解决空中下放物品后玩家会瞬间触发下坐的问题
     
     return 1;
 }
@@ -109,6 +109,7 @@ extern "C" int CheckCustomDrop(void* player) {
 // ========================================================================
 
 // [龟壳下放模块] CustomInstantDrop (PAL1: 0x8012E8C0)
+// 让下放的龟壳处于空中时也具备和上抛的龟壳一样的相关特性
 kmBranchDefAsm(0x8012E8C0, 0x8012E8C4) {
     nofralloc
     stwu      r1, -0x30(r1)
@@ -128,7 +129,7 @@ kmBranchDefAsm(0x8012E8C0, 0x8012E8C4) {
     mtlr      r0
     addi      r1, r1, 0x30
     
-    // 完美重构：符号重定向跳回原版安全出口
+    //重构：符号重定向跳回原版安全出口
     lis       r0, CustomDrop_Return@h
     ori       r0, r0, CustomDrop_Return@l
     mtctr     r0
@@ -144,6 +145,11 @@ _CustomDrop_original:
 }
 
 // [龟壳上抛模块] ThrowUpWhenUpIsPressed (PAL1: 0x8003B2E8)
+// 上抛的壳本质是原版的slide滑动状态，但为了让它区别正常slide态的壳实现以下异步特征，我们利用龟壳内的+0x7D8与+0x7D4的空闲偏移量
+// 特征①：让上抛状态的壳不会被玩家伤害的同时仅伤害敌人 
+// 特征②：让上抛状态的壳在空中时可以被玩家抓取
+// 特征③：修正上抛的壳在空中撞到侧壁时的逻辑
+// 特征④：实现和原版一致的踢壳无敌帧机制
 extern "C" void ThrowShellInTheAir();
 kmCall(0x8003B2E8, ThrowShellInTheAir);
 asm void ThrowShellInTheAir() {
@@ -188,6 +194,7 @@ _ThrowShell_slide:
 }
 
 // [物理修正] MakeTheShellNotMove (PAL1: 0x8003A768)
+// 功能：当玩家骑乘耀西按↓方向键进行下放龟壳时，龟壳保持静止睡眠态，若不按↓则执行原版逻辑
 kmBranchDefAsm(0x8003A768, 0x8003A76C) {
     nofralloc
     lwz       r0, 0xEA8(r31)
@@ -236,12 +243,14 @@ _MakeNotMove_changestate:
     lwz       r30, 0x28(r1)
     lwz       r29, 0x24(r1)
     lwz       r0, 0x34(r1)
-    mtlr      r0
+    mtctr     r0
     addi      r1, r1, 0x30
+    bctr
     blr
 }
 
 // [物理修正] SleepIfNotMoving (PAL1: 0x8003B9C0)
+// 当Y速度为 0 时证明龟壳已落地，自动切换至睡眠态，并清除+0x7D4和+0x7D8的标签
 extern "C" void SleepIfNotMoving();
 kmCall(0x8003B9C0, SleepIfNotMoving);
 asm void SleepIfNotMoving() {
@@ -264,7 +273,7 @@ asm void SleepIfNotMoving() {
     stw       r0, 0x7D8(r31)
     stw       r0, 0x7D4(r31)
 
-    // 再次使用完美符号重定向
+    // 再次使用符号重定向
     lis       r4, StateID_Sleep__11daEnShell_c@h
     ori       r4, r4, StateID_Sleep__11daEnShell_c@l
 
@@ -275,7 +284,7 @@ asm void SleepIfNotMoving() {
     bctrl
 
     addi      r3, r31, 0x1EC
-    // 完美重构：符号重定向调用实体子类型更新函数
+    // 重构：符号重定向调用实体子类型更新函数
     lis       r12, UpdateActorSubtype_Func@h
     ori       r12, r12, UpdateActorSubtype_Func@l
     mtctr     r12
@@ -292,6 +301,7 @@ _SleepIfNot_end:
 kmWrite32(0x8003B9B0, 0x60000000); // FixSOTInstantSleep (NOP 补丁)
 
 // [碰撞修正] AddUpthrowCheck (PAL1: 0x80038A64)
+// 判定是否是上抛的壳，如果是则允许它在空中被玩家抓取，抓取后清空+0x7D8标志位
 extern "C" void AddUpthrowCheck();
 kmCall(0x80038A64, AddUpthrowCheck);
 asm void AddUpthrowCheck() {
@@ -304,7 +314,7 @@ asm void AddUpthrowCheck() {
     stw     r12, 0x7D8(r27)   
 
     bnelr
-    // 完美重构：符号重定向跳转
+    // 符号重定向跳转
     lis     r0, UpthrowCheck_Return@h
     ori     r0, r0, UpthrowCheck_Return@l
     mtctr   r0
@@ -312,6 +322,7 @@ asm void AddUpthrowCheck() {
 }
 
 // [碰撞修正] CustomKickTimerHook (PAL1: 0x8003971C)
+// 踢处于上抛或下放状态的壳时，给予踢壳的玩家13帧免碰撞无敌帧
 kmBranchDefAsm(0x8003971C, 0x80039720) {
     nofralloc
     lwz     r12, 0x7D4(r29)   
@@ -328,6 +339,7 @@ _CustomKickTimerHook_Execute:
 }
 
 // [物理修正] CustomWallHitHook (PAL1: 0x8003BAE0)
+// 避免上抛或下放的壳撞到墙壁后原速返回的异常，修正为不改变方向，不影响正常平扔滑动的壳和睡眠的壳
 kmBranchDefAsm(0x8003BAE0, 0x8003BAE8) {
     nofralloc
     lwz     r12, 0x7D8(r31)   
@@ -344,6 +356,7 @@ _CustomWallHitHook_Execute:
 }
 
 // [碰撞修正] CustomSpinJumpFix (PAL1: 0x80038A28)
+// 修正旋转跳状态下的玩家会被上抛或下放的壳误伤且无法抓取的问题
 kmBranchDefAsm(0x80038A28, 0x80038A2C) {
     nofralloc
     lwz     r12, 0x7D8(r27)   
@@ -358,6 +371,7 @@ _CustomSpinJumpFix_Execute:
 }
 
 // [修正] BreakBlocksFromBelow (PAL1: 0x8003B66C)
+// 改善龟壳传感器使得从下方击碎砖块的效果更好
 extern "C" void BreakBlocksFromBelow();
 kmCall(0x8003B66C, BreakBlocksFromBelow);
 asm void BreakBlocksFromBelow() {
@@ -371,6 +385,11 @@ asm void BreakBlocksFromBelow() {
 // 5. 炸弹摩擦力修正 (Custom Bomb Friction)
 // ========================================================================
 // 挂载点：0x8006CDD0 
+// 原版扔出的炸弹会每帧减少X速度直至0，导致上抛的轨迹非标准抛物线，本hook用于修正以下问题：
+// ①上抛的炸弹在空中时x速度不会降低，轨迹呈现完美抛物线，落地后出现轻微颠簸效果，X速度开始受到摩擦力影响，速度不断降低直至0
+// ②修正上抛的炸弹在空中撞到天花板时X速度不会发生突变的问题，通过逆向推导出原生的天花板反弹时的Y速度公式突变线性关系并写入
+// ③修正上抛的炸弹在空中时被再次抓取的问题
+
 kmBranchDefAsm(0x8006CDD0, 0x8006CDD4) {
     nofralloc
     // 1. 查验身份 (133 炸弹 和 134 伞兵炸弹)
@@ -396,7 +415,8 @@ _check_tag:
     andis.    r11, r12, 0x2400
     beq       _check_ground
 
-    // 5. 天花板原生态物理反弹结算
+    // 5. 天花板原生态物理反弹结算，逐帧观察逆向推导得出的精准撞击天花板后的速度变化，
+    // 测试结果表明，实际效果完美符合该线性公式
     lfs       f0, 0x00EC(r3)
     stwu      sp, -0x10(sp)      
 
@@ -421,15 +441,18 @@ _check_tag:
     b         _apply_friction
 
 _check_ground:
+    // 6. 地面检测与颠簸衰减分离逻辑 
+    // 第一步：不管 Y 速度多少，先看这帧到底有没有撞到地
     lwz       r12, 0x274(r3)         
-    lis       r11, 0x0001       
-    ori       r11, r11, 0xE000   
-    and.      r10, r12, r11
-    beq       _skip_friction
-
+    lis       r11, 0x0001       // 将 0x0001 加载到 r11 的高 16 位
+    ori       r11, r11, 0xE000   // 将 0xE000 拼接到 r11 的低 16 位 (此时 r11 = 0x0001E000)
+    and.      r10, r12, r11     // 将 +0x274(r12) 与掩码(r11)进行按位与运算
+    beq       _skip_friction    // 没碰到地面，直接跳过
+    
+    // 第二步：既然碰到了地，看 Y 速度判断是“正在颠簸反弹”还是“彻底平稳”
     lwz       r12, 0x00EC(r3)
     cmpwi     r12, 0
-    beq       _strip_tag
+    beq       _strip_tag       // 如果 Y 速度已经等于 0，说明彻底停稳，去撕标签
 
     lis       r12, 0x3F1A
     stw       r12, -0x04(sp)
@@ -437,9 +460,10 @@ _check_ground:
     lfs       f0, 0x00E8(r3)        
     fmuls     f0, f0, f1
     stfs      f0, 0x00E8(r3)  
-    b         _skip_friction
+    b         _skip_friction    // 保留标签，不执行原版摩擦力，继续下一次弹跳
 
 _strip_tag:
+    // 运行到这，说明彻底平稳落地：剥夺炸弹的上抛标签
     li        r12, 0
     stw       r12, 0x4E4(r3)         
 
@@ -511,7 +535,6 @@ _ThrowBombUp_end:
 // ========================================================================
 // 7. 螺旋桨方块上抛逻辑 (Propeller Block Throw)
 // ========================================================================
-// 【修改备注】替换原版的硬编码跳跃，使用外部符号让 Kamek 自动寻址跨区
 extern "C" void PropellerThrow_ReturnUp();    
 extern "C" void PropellerThrow_ReturnNormal(); 
 
@@ -548,7 +571,7 @@ kmBranchDefAsm(0x80894FAC, 0x80894FB0) {
     addi    r1, r1, 0x10
     mr      r3, r29
 
-    // 【剔除硬编码】跳回上抛结算原址
+    // 跳回上抛结算原址
     lis     r12, PropellerThrow_ReturnUp@h
     ori     r12, r12, PropellerThrow_ReturnUp@l
     mtctr   r12
@@ -556,7 +579,7 @@ kmBranchDefAsm(0x80894FAC, 0x80894FB0) {
 
 _PropellerThrowUp_Normal:
     mr      r3, r29
-    // 【剔除硬编码】跳回平扔结算原址
+    // 跳回平扔结算原址
     lis     r12, PropellerThrow_ReturnNormal@h
     ori     r12, r12, PropellerThrow_ReturnNormal@l
     mtctr   r12
@@ -602,7 +625,7 @@ _GlowThrowUp_ApplySpeed:
     stw     r4, 0x08(r1)
     lfs     f1, 0x08(r1)
 
-    // 完美复用原版汇编的 blr 干净返回，无任何硬编码
+    // 复用原版汇编的 blr 干净返回，无任何硬编码
     lwz     r0, 0x14(r1)
     addi    r1, r1, 0x10
     mtlr    r0
@@ -617,7 +640,7 @@ _GlowThrowUp_ApplySpeed:
 // 提前声明原版函数
 extern "C" void PowThrow_ReturnNormal(); 
 
-// 挂载点：0x808928A0 (PAL2)
+// 挂载点：0x808928A0 (PAL1)
 kmBranchDefAsm(0x80892890, 0x80892894) {
     nofralloc
     stwu    r1, -0x20(r1)
@@ -666,13 +689,13 @@ _PowThrowUp_Normal:
     li      r0, 0
     stw     r0, 0x04BC(r30)
 
-    // 完美跳回函数的收尾工作阶段
+    // 跳回函数的收尾工作阶段
     lis     r12, PowThrow_ReturnNormal@h
     ori     r12, r12, PowThrow_ReturnNormal@l
     mtctr   r12
     bctr
 
-    blr  // <--- 留给 Kamek 链接器的完美替身！
+    blr  // <--- 留给 Kamek 链接器替身！
 }
 
 // ========================================================================
@@ -682,7 +705,7 @@ _PowThrowUp_Normal:
 extern "C" void SpringThrow_CallFunc();  
 extern "C" void SpringThrow_ReturnNormal(); 
 
-// 挂载点：0x80A3A23C (PAL2)
+// 挂载点：0x80A3A23C (1)
 kmBranchDefAsm(0x80A3A23C, 0x80A3A240) {
     nofralloc
     stwu    r1, -0x20(r1)
@@ -732,5 +755,5 @@ _SpringThrowUp_Normal:
     mtctr   r12
     bctr
 
-    blr  // <--- 留给 Kamek 链接器的完美替身！
+    blr  // <--- 留给 Kamek 链接器的替身！
 }
