@@ -19911,3 +19911,5 @@ PropellerThrow_ReturnNormal = 0x80894FB0
 PowThrow_ReturnNormal=0x80892894
 SpringThrow_CallFunc=0x80070C90
 SpringThrow_ReturnNormal=0x80A3A240
+EN_LandbarrelPlayerCollision=0x80a582a0
+kill__5dEn_cFv=0x80097F70
