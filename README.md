@@ -2,12 +2,12 @@
 
 ![Game](https://img.shields.io/badge/Game-NSMBW-red)
 ![Compiler](https://img.shields.io/badge/Compiler-CodeWarrior-yellow)
-![Toolchain](https://img.shields.io/badge/Toolchain-Kamek-lightgrey)
+![Toolchain](https://img.shields.io/badge/Toolchain-Kamek_2-lightgrey)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-An advanced physics and movement patch for *New Super Mario Bros. Wii* (NSMBW). This project was created to enrich the vanilla physics engine with new mechanics, expanding creative possibilities for level designers (especially for **Kaizo hacks**) and enhancing overall gameplay. 
+An advanced physics and movement patch for *New Super Mario Bros. Wii* (NSMBW). This project was created to enrich the vanilla physics engine with new mechanics, expanding creative possibilities for level designers  and enhancing overall gameplay. **I will continue to optimize the codebase and introduce new movement mechanics in the future.**
 
-This patch can be used seamlessly with NSMBW, *NewerSMBW*, or other custom hacks via a simple Riivolution XML.
+This patch has been entirely refactored using the modern **Kamek 2** toolchain with propel parts, making it universally compatible across all regional game versions. It can be used seamlessly with vanilla NSMBW, *NewerSMBW*, or other custom hacks via a simple Riivolution XML. Developers can easily clone this repository and use the provided `externals.txt` mapping for custom Kamek 2 builds.
 
 Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it in your videos! If you do, I would greatly appreciate it if you could credit me or link back to this repository.
 
@@ -16,7 +16,7 @@ Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it i
 > [!IMPORTANT]
 > **Disclaimer & Feedback:**
 > This patch is currently being developed and playtested almost entirely by me as a solo developer. While I strive for stability, some bugs may inevitably slip through. 
-> If you encounter any bugs or crashes, I would highly appreciate your feedback via GitHub Issues or [Discord](https://discordapp.com/users/1338165547753275457)! **However, before reporting a crash, please ensure it is NOT caused by mod memory conflicts** (Please read the [Compatibility & Conflicts](#compatibility--usage-notes) section carefully to save us both time).
+> If you encounter any bugs or crashes, I would highly appreciate your feedback via GitHub Issues or [Discord](https://discordapp.com/users/1338165547753275457)! **However, before reporting a crash, please ensure it is NOT caused by mod memory conflicts**.
 
 ---
 
@@ -24,9 +24,7 @@ Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it i
 - [Features](#features)
 - [Compatibility & Usage Notes](#compatibility--usage-notes)
 - [Known Issues & Limitations](#known-issues--limitations)
-- [Future Plans](#future-plans)
-- [For Developers](#for-developers)
-- [Credits](#credits)
+- [About & Credits](#about--credits)
 
 ---
 
@@ -38,6 +36,7 @@ Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it i
 * **Spike Immunity:** You can now safely spin-bounce on spiky enemies and objects without taking damage! 
 * **Variable Height Control:** Spin jump height is now dynamic based on how long you hold the jump button.
 * **Delayed Descent:** Holding the jump button during a spin jump reduces fall speed (hovering effect, just like in *Super Mario World*). Releasing the button immediately cancels the delay, returning you to normal fall speed.
+* **NewerSMBW Compatibility:** Spin jumping is fully supported on Newer custom enemies, allowing you to safely bounce off entities like the Newer Topman and other bespoke bosses.
 
 > [!TIP]
 > **💡 The Golden Rule of Spin Jumping:** This mechanic is strictly designed for physical and **Spike-type** hazards. It will **NOT** protect you from ethereal or energy-based hazards like Ghosts (Boos), Fire, or Electric enemies (Amps). 
@@ -69,13 +68,20 @@ Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it i
 </details>
 
 <details>
-<summary><b>3. Dynamic Climbing Jumps (Click to expand details)</b></summary>
+<summary><b>3. Slide Enhanced Module (Click to expand details)</b></summary>
+
+* **Expanded Sliding Mechanics:** Players can now safely defeat a wider variety of enemies—such as Piranha Plants, Spinies, and even Icicles—simply by sliding into them without taking damage.
+* **Safe Deflection System:** When sliding into massive or metallic spiked hazards (e.g., Spiked Balls or Big Piranha Plants), players will no longer take damage. Instead, the character will safely bounce off the enemy, opening up new creative routing possibilities.
+</details>
+
+<details>
+<summary><b>4. Dynamic Climbing Jumps (Click to expand details)</b></summary>
 
 * Optimized the jump height when detaching from **climbable terrain**. Instead of the vanilla fixed 2-block height, it now features a **dynamic 2-4 block height** controlled entirely by the player's button input.
 </details>
 
 <details>
-<summary><b>4. Up-Throw & Instant Drop Mechanics (Click to expand details)</b></summary>
+<summary><b>5. Up-Throw & Instant Drop Mechanics (Click to expand details)</b></summary>
 
 * **Item Up-Throw:** Players can now throw items directly upwards! Supported items include: Shells, Bombs, Glow Blocks, Propeller Blocks, POW Blocks, and Springs.
 * **Instant Drop:** Pressing down allows players to instantly drop Shells and Bombs at your feet.
@@ -87,7 +93,9 @@ Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it i
 ## Compatibility & Usage Notes
 
 The `Release` tab contains ready-to-use compiled packages. 
-* **Riivolution Ready:** Simply drop the contents into your SD card, which will load the custom `loader.bin` through Riivolution.
+* **Universal Support:** Thanks to the Kamek 2 refactor, this patch now supports **all regional game versions**.
+* **Loader Optimization:** The `loader.bin` payload has been optimized to allow seamless simultaneous loading with other custom mods built on the **Newer engine**.
+* **Riivolution Ready:** Simply drop the contents into your SD card, which will load the custom `loader.bin` through Riivolution. Ensure `externals.txt` is present if you are building from source.
 
 > [!WARNING]
 > **Important Compatibility Warnings:** 
@@ -97,30 +105,12 @@ The `Release` tab contains ready-to-use compiled packages.
 
 ## Known Issues & Limitations
 Due to the technical complexities of the NSMBW engine, the following issues currently exist (fixes may come in the future, but are limited by engine constraints):
+
 1. Up-thrown bombs and springs cannot hit or interact with blocks. Up-thrown POWs and springs do not interact with the player mid-air.
 2. Up-thrown shells sometimes clip through blocks or fail to trigger block interactions correctly.
 3. Spin-jump bouncing may fail to trigger on certain enemies if the player is currently in damage I-frames (invincibility frames).
-4. Certain custom enemies in the *NewerSMBW* engine may still damage the player during a spin jump.
+4. Yoshi attempting to bounce on the Spike Balls (Stone Balls) thrown by Spikes fails to trigger the bounce mechanic for unknown reasons.
 5. Up-throwing an item still uses the vanilla forward-throw player animation. *(I am not an animator, so if anyone can make a custom upward-throwing animation, contributions are welcome!)*
-
----
-
-## Note for Developers (Compilation & Source Code)
-
-This project has been massively refactored into a modern **Kamek 2** environment. 
-* **Kamek 2 refactoring:** Almost all messy absolute memory hardcoding has been eradicated. 
-* **Plug and Play:** You can easily clone this repository, drop the source files into your Kamek 2.0 build environment. Feel free to explore, merge, and expand upon this codebase!
-
----
-
-## Future Plans
-I will gradually look into the "Known Issues" listed above, prioritizing the "low-hanging fruit". Moreover, I plan to explore a few more movement mechanics:
-
-* **Enhanced Sliding Mechanics:** Modifying the slide so it can kill most spiky enemies, bringing it closer to the logic found in *SMM* and *SMW*.
-* **Wall-Jump Spin:** Enabling Mario to perform a spin jump directly off walls, adapting the fluid movement style from *NSMBU*.
-
-> [!NOTE]
-> My free time is fairly limited, so progress on these new features and fixes will be slow. I appreciate your patience!
 
 ---
 
