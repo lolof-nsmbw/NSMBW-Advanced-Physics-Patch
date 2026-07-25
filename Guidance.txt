@@ -1,11 +1,11 @@
 =========================================================
-NSMBW Advanced Physics & Movement Patch v1.0.0
+NSMBW Advanced Physics & Movement Patch v1.1.0
 =========================================================
 
 === ⚠️ IMPORTANT DISCLAIMER & REQUIREMENTS ⚠️ ===
 
-* HARDWARE WARNING: Full disclosure—this entire project was developed and tested exclusively on the Dolphin Emulator. It has NOT been tested on real Wii hardware yet. While it runs perfectly on Dolphin, I cannot guarantee it won't crash on an actual console. If you try it on a real Wii, please let me know the results!
-* SUPPORTED VERSIONS: This patch ONLY works with NTSC-U Rev 1 (SMNE01) or PAL Rev 2 (SMNP01).
+* HARDWARE WARNING: Full disclosure—this entire project was developed and tested exclusively on the Dolphin Emulator. It has NOT been extensively tested on real Wii hardware yet. If you try it on a real Wii, please let me know the results!
+* SUPPORTED VERSIONS: Thanks to the Kamek 2 refactor and propel parts, this patch now universally supports ALL regional versions of NSMBW.
 
 === HOW TO INSTALL (For Dolphin / Wii) ===
 
@@ -20,20 +20,18 @@ Step 6: Set the "Advanced Physics Patch" option to "Enabled" and click Launch!
 === 🚨 CRASH WARNINGS & COMPATIBILITY 🚨 ===
 
 This patch will CRASH or conflict under these conditions:
-1. Memory Overlap: This patch heavily uses the memory area from 0x80001800 to 0x80003800. If another mod (such as Super Luigi Land Wii) uses this same space for custom code blocks, the game will crash immediately.
-2. Hook Conflicts: If another mod intercepts the vanilla damage calculation function using the same address (e.g., mkwcat's dynamic .rel injection), the game will crash. 
-
-(Please refer to the README.md for advanced instructions on how to resolve memory overlaps and recompile the patch).
+1. Memory Allocation: The patch now utilizes dynamic linking via Kamek 2. However, if another mod's loader injection point overlaps with our bootstrap address (0x80005400), the game will crash immediately.
+2. Hook Conflicts: If another mod intercepts the vanilla damage calculation function using the same address (e.g., mkwcat's dynamic .rel injection), some features will not work properly or the game will crash. 
 
 === USAGE GUIDELINES ===
 
 You are completely free to play and enjoy this patch privately. 
-However, if you integrate this patch into a published custom hack, a Kaizo level pack, or showcase it in a YouTube video/stream, please credit me and provide a link back to the GitHub repository or YouTube channel.
+However, if you integrate this patch into a published custom hack, a level pack, or showcase it in a YouTube video/stream, please credit me and provide a link back to the GitHub repository or YouTube channel.
 
 
 === Developer's Notes : Behind the Scenes ===
 
-To be completely honest, I'm just a beginner. I started learning reverse engineering and Kamek completely from scratch in March, using my free time. Because of this, I know my current codebase is probably a bit of a mess—it's full of hardcoded addresses, hacky workarounds, and it's a nightmare to maintain across different game regions lol. I still don't have a profound understanding of the Kamek compiler, so whenever I hit a wall, I just brute-forced it. Please bear with my spaghetti code! Any programming advice or PRs are more than welcome.
+To be completely honest, I started learning reverse engineering and Kamek completely from scratch in March, using my free time. By the time I hit v1.0.0, my codebase was a bit of a mess—full of hardcoded addresses and region-specific hacks. But I couldn't stand the spaghetti code anymore! So, for v1.1.0, I sat down and fully refactored the entire project into the modern Kamek 2 environment. It was painful, but it finally runs beautifully across all regions.
 
 Here is a quick timeline of how this patch came to be:
 
@@ -59,6 +57,12 @@ After extensive testing, I noticed NewerGEM's foundation had some quirks, so I h
 * Bomb Trajectories: The original bomb up-throw trajectory felt wonky (they would slide against ceilings). I completely overhauled the bomb physics to make them look natural and fixed the issue where mid-air bombs couldn't be re-grabbed.
 * Expanded the up-throw logic to POWs, Springs, and Propeller blocks.
 (Regrettably, I still haven't figured out how to fix the NewerGEM bug where up-thrown items don't interact with certain blocks, nor do I know how to add custom up-throw animations yet.)
+
+June/July: The Kamek 2 Refactor & The Art of Sliding
+After the initial release, I realized maintaining hardcoded addresses across different game regions was a nightmare. So, I bit the bullet and spent weeks refactoring the entire project into the Kamek 2 toolchain. It was a steep learning curve, but finally achieving universal compatibility felt amazing.
+
+During this time, I also turned my attention to the slide mechanic. In vanilla NSMBW, sliding into a spiny or a piranha plant is just a death sentence. That felt fundamentally wrong for Kaizo players. Thus, the "SlideEnhanced" module was born. 
+I rewrote the collision logic so you can now safely slide-kill Spinies, Piranha Plants, and even Icicles. But I didn't want to make Mario *too* overpowered—so if you try to slide into something massive and metallic like a Spiked Ball, you won't kill it, but you won't die either. The system will safely bounce (deflect) you away, which I think opens up some really sick Kaizo routing opportunities. Oh, and I finally got spin jumps to work properly on NewerSMBW's custom enemies like the Topman!
 
 What's Next?
 Right now, I'm heavily researching the "front-carry" mechanics for items. If I make any breakthroughs, I'll release the code and patch ASAP.
