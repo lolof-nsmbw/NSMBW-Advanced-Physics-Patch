@@ -117,8 +117,8 @@ extern "C" bool CheckSpecialDamageShield(daPlBase_c* player, dCc_c* apThis, dCc_
     // ========================================================================
     // 【推土机防线】：完全独立于旋转跳的滑铲判定
     // ========================================================================
-    bool isSliding = player->isStatus(daPlBase_c::STATUS_SLIP_ACTIVE) || 
-                     player->isStatus(daPlBase_c::STATUS_INITIAL_SLIDE);
+    bool isSliding = player->isStatus(daPlBase_c::STATUS_SLIP_ACTIVE)|| 
+                    player->isStatus(daPlBase_c::STATUS_PENGUIN_SLIDE);
                      
     if (isSliding) {
         switch (attacker->mProfName) {
@@ -126,6 +126,7 @@ extern "C" bool CheckSpecialDamageShield(daPlBase_c* player, dCc_c* apThis, dCc_
             case 0x0153: case 0x01FF: case 0x0120:  //icicle，fishbone
             case 0x011C: case 0x0095: case 0x009F:  //urchin，blooper,cheep cheep
             case 0x014D: case 0x011F: //spore ball of Lily Piranha plant,螃蟹扔的小石块
+            case 0x0090: //line-controlled fuzzy
                 return true; 
             // [2] 铁球等硬物 (需进行【几何有效碰撞检测】才免伤)
             // [2] 铁球硬物防线：几何判定与弹反！
@@ -174,7 +175,8 @@ extern "C" bool CheckSpecialDamageShield(daPlBase_c* player, dCc_c* apThis, dCc_
         case 0x011C: case 0x011D: case 0x0176: 
         case 0x0063: case 0x0064: case 0x0065: 
         case 0x0066: case 0x0090: case 0x00C0:
-        case 0x0153:
+        case 0x0153: case 0x009F: case 0x0120:
+        case 0x00A1: // Spiny Cheep Cheep
             isVanillaHazard = true;
             break;
             
