@@ -44,7 +44,6 @@ extern "C" bool GodModeSlideInterceptor(dCc_c* enemySensor, dCc_c* playerSensor)
         
         // 直接查玩家的状态位
         isNormalSlide = player->isStatus(daPlBase_c::STATUS_SLIP_ACTIVE) || 
-                        player->isStatus(daPlBase_c::STATUS_INITIAL_SLIDE) ||
                         player->isStatus(daPlBase_c::STATUS_PENGUIN_SLIDE);
     } 
     else if (playerBase->mProfName == 14) {
@@ -74,15 +73,18 @@ extern "C" bool GodModeSlideInterceptor(dCc_c* enemySensor, dCc_c* playerSensor)
     switch (enemy->mProfName) {
         // [1] 白名单 M：直接击杀这些小型软体怪物
         case 0x0039: // Spiny
+        case 0x003A: // upside-down Spiny
         case 0x0057: // spike top
         case 0x005B: case 0x005C: case 0x005D: case 0x005E: // pipe Piranha plant
         case 0x005F: case 0x0060: case 0x0061: case 0x0062: // pipe Fire Piranha plant
         case 0x0063: // Piranha plant
         case 0x0065: // fire piranha plant
         case 0x0067: // stalking piranha plant
+        case 0x0090: // line-controlled fuzzy
         case 0x0091: // pokey
         case 0x0095: // blooper
         case 0x009F: // cheep cheep
+        case 0x00A1: // Spiny Cheep Cheep
         case 0x00C8: // prickly goomba
         case 0x011C: // Urchin
         case 0x011F: // 螃蟹扔的小石块
@@ -91,6 +93,7 @@ extern "C" bool GodModeSlideInterceptor(dCc_c* enemySensor, dCc_c* playerSensor)
         case 0x014D: // spore ball of Lily Piranha plant
         case 0x0153: // falling icicle
         case 0x01FF: // icicle
+        case 0x0238: // 0238
             shouldKill = true;
             break;
             
@@ -116,7 +119,7 @@ extern "C" bool GodModeSlideInterceptor(dCc_c* enemySensor, dCc_c* playerSensor)
     if (shouldKill) {
         DisableColliderNow(enemySensor);
         
-        // 计分系统，共轨原生计数器！
+        // 计分系统，共轨原生计数器
         int currentCombo = player->mPlComboCount;
         ulong scoreType = 1; // 200 分起步
         if (currentCombo == 1) scoreType = 2;      // 400
@@ -138,7 +141,7 @@ extern "C" bool GodModeSlideInterceptor(dCc_c* enemySensor, dCc_c* playerSensor)
     }
 
     if (shouldKnockoff) {
-        // 计算距离也用 targetToPush，保证骑兵模式下是以耀西的位置为准！
+        // 计算距离也用 targetToPush，保证骑兵模式下是以耀西的位置为准
         float deltaX = targetToPush->mPos.x - enemy->mPos.x;
         float absDeltaX = deltaX < 0.0f ? -deltaX : deltaX;
         float enemyRadius = enemySensor->mCcData.mBase.mSize.x;
