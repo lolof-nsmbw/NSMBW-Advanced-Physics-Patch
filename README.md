@@ -7,7 +7,7 @@
 
 An advanced physics and movement patch for *New Super Mario Bros. Wii* (NSMBW). This project was created to enrich the vanilla physics engine with new mechanics, expanding creative possibilities for level designers  and enhancing overall gameplay. **I will continue to optimize the codebase and introduce new movement mechanics in the future.**
 
-This patch has been entirely refactored using the modern **Kamek 2** toolchain with propel parts, making it universally compatible across all regional game versions. It can be used seamlessly with vanilla NSMBW, *NewerSMBW*, or other custom hacks via a simple Riivolution XML. Developers can easily clone this repository and use the provided `externals.txt` mapping for custom Kamek 2 builds.
+This patch has been entirely refactored using the modern **Kamek 2** toolchain with propel parts, making it universally compatible across all regional game versions. It can be used seamlessly with vanilla NSMBW, *NewerSMBW*, or other custom hacks via a simple Riivolution XML. Developers can easily clone this repository and use the provided `externals.txt` mapping for custom Kamek 2 builds. The `Release` tab contains ready-to-use compiled packages.
 
 Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it in your videos! If you do, I would greatly appreciate it if you could credit me or link back to this repository.
 
@@ -92,9 +92,10 @@ Feel free to use this patch in your custom levels, Kaizo hacks, or showcase it i
 
 ## Compatibility & Usage Notes
 
-The `Release` tab contains ready-to-use compiled packages. 
+**This patch is fully compatible with vanilla NSMBW, NewerSMBW, and NSMBWer+.** Specific compatibility details and usage instructions are as follows:
 * **Universal Support:** Thanks to the Kamek 2 refactor, this patch now supports **all regional game versions**.
-* **Loader Optimization:** The `loader.bin` payload has been optimized to allow seamless simultaneous loading with other custom mods built on the **Newer engine**.
+* **Loader Optimization:** The `loader.bin` payload has been optimized to allow seamless simultaneous loading with other custom mods built on the **NewerSMBW**.
+* **NSMBWer+ Support:** Fully compatible. However, the vanilla loaders are natively incompatible with each other out-of-the-box. You must modify the NSMBWer+ loader to make it compatible with this patch.
 * **Riivolution Ready:** Simply drop the contents into your SD card, which will load the custom `loader.bin` through Riivolution. Ensure `externals.txt` is present if you are building from source.
 
 > [!WARNING]
