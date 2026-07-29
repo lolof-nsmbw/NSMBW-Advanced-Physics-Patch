@@ -1,9 +1,13 @@
-# NSMBW Advanced Physics & Movement Patch
+<div align="center">
+  
+# NSMBW Advanced Physics Patch
 
 ![Game](https://img.shields.io/badge/Game-NSMBW-red)
 ![Compiler](https://img.shields.io/badge/Compiler-CodeWarrior-yellow)
 ![Toolchain](https://img.shields.io/badge/Toolchain-Kamek_2-lightgrey)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+
+</div>
 
 An advanced physics and movement patch for *New Super Mario Bros. Wii* (NSMBW). This project was created to enrich the vanilla physics engine with new mechanics, expanding creative possibilities for level designers  and enhancing overall gameplay. **I will continue to optimize the codebase and introduce new movement mechanics in the future.**
 
