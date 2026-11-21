@@ -39,7 +39,7 @@
   --r-sm:12px;
   --maxw:1160px;
   --font-ui:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
-  --font-round:"Trebuchet MS","Segoe UI",system-ui,"Verdana",sans-serif;
+  --font-round:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
   --navh:64px;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -171,15 +171,15 @@ h1 .sub{display:block;margin-top:12px;font:800 clamp(16px,2.3vw,25px)/1.2 var(--
 .hud{list-style:none;margin:34px 0 0;padding:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
   border-radius:20px;background:rgba(6,10,28,.6);border:1px solid rgba(255,255,255,.10);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 20px 44px -30px #000}
-.hud li{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;border-radius:14px;
+.hud li{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:14px;
   background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.02));
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset 0 1px 0 rgba(255,255,255,.16)}
-.hud .hud-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;margin-top:1px;
+.hud .hud-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;
   background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.13),inset 0 1px 0 rgba(255,255,255,.16)}
 .hud .hud-ic svg{width:17px;height:17px}
 .hud .hud-ic img{width:35px;height:35px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.55))}
-.hud b{display:block;font:900 19px/1 var(--font-round);color:#fff;font-variant-numeric:tabular-nums}
-.hud span{display:block;font-size:11px;color:var(--dim);line-height:1.35;margin-top:3px}
+.hud b{display:block;font:800 24px/1.05 var(--font-round);letter-spacing:-.025em;color:#fff;font-variant-numeric:tabular-nums}
+.hud span{display:block;font-size:12.5px;font-weight:500;color:var(--dim);line-height:1.35;margin-top:3px}
 @media (max-width:1000px){
   .hero-grid{grid-template-columns:1fr;gap:0}
   .hero{padding-top:48px}
@@ -392,22 +392,25 @@ tbody tr:hover th,tbody tr:hover td{background:rgba(255,255,255,.05)}
   border:1px solid rgba(255,255,255,.12);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 30px 70px -36px #000}
 .beta-kicker{margin:0 0 10px;font:800 11px/1 var(--font-ui);letter-spacing:.16em;text-transform:uppercase;color:#ffb3a5}
-.beta h2{margin:0;font:900 clamp(22px,3vw,30px)/1.15 var(--font-round);letter-spacing:-.02em;color:#fff;
-  text-shadow:0 2px 0 rgba(120,20,0,.6),0 10px 26px rgba(0,0,0,.45)}
-.beta p.intro{margin:11px 0 0;max-width:74ch;font-size:14px;color:#c6cfe8}
+.beta h2{margin:0;font:800 clamp(24px,3.2vw,32px)/1.15 var(--font-round);letter-spacing:-.025em;color:#fff;
+  text-shadow:0 2px 0 rgba(120,20,0,.55),0 10px 26px rgba(0,0,0,.45)}
+.beta p.intro{margin:12px 0 0;max-width:74ch;font-size:14.5px;line-height:1.65;color:#cbd4ec}
 .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px;margin-top:22px}
-.role{padding:16px;border-radius:16px;background:rgba(8,12,32,.55);border:1px solid rgba(255,255,255,.10);
+.role{padding:18px;border-radius:16px;background:rgba(8,12,32,.55);border:1px solid rgba(255,255,255,.10);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .2s,border-color .2s}
 .role:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.2)}
 .role .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;margin-bottom:0;
-  font:900 11.5px/1 var(--font-round);color:#25190a;background:linear-gradient(180deg,#ffe27a,#ffbf2e);
+  font:800 11.5px/1 var(--font-round);color:#25190a;background:linear-gradient(180deg,#ffe27a,#ffbf2e);
   border:1px solid rgba(255,255,255,.5)}
-.role h3{margin:0 0 6px;font:800 14.5px/1.3 var(--font-round);color:#fff}
-.role-top{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.role h3{margin:0 0 7px;font:750 15.5px/1.3 var(--font-round);letter-spacing:-.01em;color:#fff}
+.role-top{display:flex;align-items:center;gap:9px;margin-bottom:11px}
 .role-ic{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 3px 7px rgba(0,0,0,.55))}
-.role p{margin:0;font-size:12.8px;color:#a9b4d2;line-height:1.5}
-.howto{margin-top:18px;padding:15px 17px;border-radius:14px;font-size:13px;color:#c2cbe4;
+.role p{margin:0;font-size:13.4px;color:#b2bddb;line-height:1.58}
+.howto{margin-top:18px;padding:16px 18px;border-radius:14px;font-size:13.5px;line-height:1.62;color:#c8d1ea;
   background:rgba(255,255,255,.035);border:1px dashed rgba(255,255,255,.20)}
+.beta-rules{margin-top:12px;padding:13px 17px;border-radius:12px;font-size:12.5px;line-height:1.58;color:#aab5d4;
+  background:rgba(255,95,80,.06);border:1px solid rgba(255,110,90,.22)}
+.beta-rules b{color:#ffc4b8}
 .howto b{color:#fff}
 .howto code{font:600 .88em/1 ui-monospace,Menlo,Consolas,monospace;color:#ffe08a;
   background:rgba(255,204,51,.10);padding:2px 6px;border-radius:6px;border:1px solid rgba(255,204,51,.18)}
@@ -582,7 +585,7 @@ footer{margin-top:44px;border-top:1px solid rgba(255,255,255,.09);background:rgb
               </div>
             </div>
           </li>
-<li class="mod" data-cat="mario" data-beta="0" data-id="m03" data-search="wall-kick into spin jump shake during a wall jump to launch into a spin jump while keeping the full wall-kick arc. wall kick wall jump shake spin jump walljump tech">
+<li class="mod" data-cat="mario" data-beta="0" data-id="m03" data-search="nsmbu wall-kick into spin jump shake during a wall jump to launch into a spin jump while keeping the full wall-kick arc. wall kick wall jump shake spin jump walljump tech">
             <h3 class="mod-h">
               <button class="mod-btn" type="button" aria-expanded="false" aria-controls="b-m03">
                 <span class="mod-idx" aria-hidden="true">03</span>
@@ -591,7 +594,7 @@ footer{margin-top:44px;border-top:1px solid rgba(255,255,255,.09);background:rgb
                   <span class="mod-line">Shake during a wall jump to launch into a spin jump while keeping the full wall-kick arc.</span>
                 </span>
                 <span class="mod-tags">
-                  <span class="tag t-custom" title="Custom">CUSTOM</span>
+                  <span class="tag t-nsmbu" title="NSMBU Style">NSMBU</span>
                 </span>
                 <span class="chev" aria-hidden="true"></span>
               </button>
@@ -682,7 +685,7 @@ footer{margin-top:44px;border-top:1px solid rgba(255,255,255,.09);background:rgb
             </h3>
             <div class="fold mod-body" id="b-m07" data-open="false">
               <div class="fold-in">
-                <ul class="mod-points"><li>Hold Down while carrying an item underwater to counter buoyancy and sink at a steady pace.</li><li>Throw or soft-drop items freely while swimming, walking on the seafloor, or spin-jumping in water.</li><li>Fixes the vanilla limitation where walking along the ocean floor blocked item throws and drops.</li><li>Works consistently across shells, Bob-ombs, Trampolines, and all carryable solid blocks.</li></ul>
+                <ul class="mod-points"><li>Hold Down while carrying an item underwater to counter buoyancy and sink at a steady pace.</li><li>Throw or soft-drop items freely while swimming or walking on the seafloor.</li><li>Fixes the vanilla limitation where walking along the ocean floor blocked item throws and drops.</li><li>Works consistently across shells, Bob-ombs, Trampolines, and all carryable solid blocks.</li></ul>
                 <div class="mod-foot"></div>
               </div>
             </div>
@@ -1484,9 +1487,9 @@ footer{margin-top:44px;border-top:1px solid rgba(255,255,255,.09);background:rgb
                 </tr>
               </thead>
               <tbody>
-          <tr><th scope="row">Koopa Shells</th><td><span class="no" title="Not applicable">&mdash;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td></tr>
-          <tr><th scope="row">Bob-ombs</th><td><span class="no" title="Not applicable">&mdash;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td></tr>
-          <tr><th scope="row">Mechakoopas</th><td><span class="no" title="Not applicable">&mdash;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td></tr>
+          <tr><th scope="row">Koopa Shells</th><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td></tr>
+          <tr><th scope="row">Bob-ombs</th><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td></tr>
+          <tr><th scope="row">Mechakoopas</th><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td></tr>
           <tr><th scope="row">Trampolines (Springs)</th><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td></tr>
           <tr><th scope="row">POW Blocks</th><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="brk" title="Bumps overhead blocks and detonates on impact">Detonates</span></td></tr>
           <tr><th scope="row">Glow Blocks</th><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td><td><span class="ok" title="Supported">&#10003;</span></td></tr>
@@ -1874,7 +1877,7 @@ footer{margin-top:44px;border-top:1px solid rgba(255,255,255,.09);background:rgb
   <section class="beta reveal" id="beta">
     <p class="beta-kicker">Beta testing</p>
     <h2>We are recruiting playtesters</h2>
-    <p class="intro">The patch is feature-complete for this beta pass. What it needs now is people who will break it on purpose. Everyone joins as a Beta Tester — test whichever way fits how you play.</p>
+    <p class="intro">This is a pure physics and engine code patch — <b>no custom levels are included</b>. Load it on top of Vanilla NSMBW, NewerSMBW, or other custom mods to playtest your favorite courses, and help us break it on purpose.</p>
     <div class="roles">
       <div class="role">
         <div class="role-top"><span class="n">01</span><img class="role-ic" src="data:image/webp;base64,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" alt="" width="72" height="72"></div>
@@ -1893,6 +1896,7 @@ footer{margin-top:44px;border-top:1px solid rgba(255,255,255,.09);background:rgb
       </div>
     </div>
     <div class="howto"><b>How to join:</b> DM the project lead, <a href="https://discord.com/users/1338165547753275457" target="_blank" rel="noopener noreferrer" style="color:#ffe08a;text-decoration:underline;text-underline-offset:3px;font-weight:700">lolof (Arisu Tendou)</a> (<code>@lolof04738</code> on Discord), with your setup (Vanilla NSMBW, NewerSMBW, NSMBWer+, or alongside other custom code) and whether you play on Dolphin or Wii hardware. A short clip beats a paragraph.</div>
+    <div class="beta-rules"><b>Beta terms:</b> Please do not leak or redistribute beta builds during testing, and do not bundle this beta into public mod releases without permission. Full source and public use will be freely available under the MIT license once the beta concludes.</div>
     <div class="cta">
       <a class="btn btn-red" href="#coverage">View Item Matrix</a>
       <a class="btn btn-ghost" href="#areas">Back to modules</a>
